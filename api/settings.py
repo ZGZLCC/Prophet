@@ -8,6 +8,7 @@ import sqlite3
 from typing import Any, Mapping
 
 from person_profile import analysis
+import platform_support
 
 APP_VERSION = "1.0.0"
 
@@ -57,6 +58,8 @@ class SettingsApiMixin:
             {
                 "name": "Prophet",
                 "version": APP_VERSION,
+                "platform": platform_support.platform_tag(),
+                "chat_export": platform_support.CHAT_EXPORT_SUPPORTED,
                 "shell": "pywebview",
                 "local_only": True,
                 "streamlit": False,

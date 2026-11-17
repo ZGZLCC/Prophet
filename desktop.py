@@ -8,15 +8,14 @@ import runpy
 import shutil
 import sys
 
+import platform_support
+
 
 FROZEN = bool(getattr(sys, "frozen", False))
 RESOURCE_ROOT = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parent)).resolve()
-DEFAULT_HOME = (
-    Path(os.getenv("LOCALAPPDATA", Path.home())) / "Prophet"
-    if FROZEN
-    else RESOURCE_ROOT
-)
+DEFAULT_HOME = platform_support.app_home() if FROZEN else RESOURCE_ROOT
 APP_HOME = Path(os.getenv("PROPHET_HOME", DEFAULT_HOME)).expanduser().resolve()
+ICON_PATH = platform_support.window_icon(RESOURCE_ROOT)
 TRUSTED_SCRIPTS = {
     (RESOURCE_ROOT / "exporters" / "qq" / "export_qq_text.py").resolve(),
     (RESOURCE_ROOT / "exporters" / "wechat" / "export_wechat_text.py").resolve(),
@@ -53,37 +52,35 @@ def dispatch_bundled_script() -> bool:
 
 
 def system_uses_dark_mode() -> bool:
-    if os.name != "nt":
-        return False
-    try:
-        import winreg
+    return platform_support.dark_mode()
 
-        with winreg.OpenKey(
-            winreg.HKEY_CURRENT_USER,
-            r"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize",
-        ) as key:
-            return winreg.QueryValueEx(key, "AppsUseLightTheme")[0] == 0
-    except OSError:
-        return False
+
+# 各平台 pywebview 实际要加载的窗口后端，自检时提前导入一次。
+GUI_BACKENDS = {
+    "Windows": ("webview.platforms.winforms", "pythonnet 与 .NET Framework 4.8"),
+    "Darwin": ("webview.platforms.cocoa", "PyObjC（pyobjc-framework-Cocoa/WebKit）"),
+}
 
 
 def check_gui_backend() -> None:
     """确认 pywebview 的窗口后端能加载。
 
-    缺 pythonnet、.NET Framework 不可用或位数不匹配时，``webview.start()`` 会直接抛异常；
+    缺 pythonnet/PyObjC 或运行时不可用时，``webview.start()`` 会直接抛异常；
     在自检里提前加载一次，让构建失败在打包阶段就暴露，而不是等到用户双击才发现。
     """
     import importlib
     import platform
 
-    if platform.system() != "Windows":
+    entry = GUI_BACKENDS.get(platform.system())
+    if entry is None:
         return
+    module, dependency = entry
     try:
-        importlib.import_module("webview.platforms.winforms")
+        importlib.import_module(module)
     except Exception as exc:  # noqa: BLE001 - ImportError、RuntimeError 都会出现
         raise RuntimeError(
-            "pywebview 的 WinForms 后端加载失败，窗口无法启动；"
-            "请检查 pythonnet 与 .NET Framework 4.8 是否可用。"
+            f"pywebview 的窗口后端 {module} 加载失败，窗口无法启动；"
+            f"请检查 {dependency} 是否可用。"
             f"原始错误：{type(exc).__name__}: {exc}"
         ) from exc
 
@@ -110,10 +107,12 @@ def run_self_test() -> None:
         RESOURCE_ROOT / "web" / "app.js",
         *(RESOURCE_ROOT / "web" / "modules").glob("*.js"),
         *(RESOURCE_ROOT / "web" / "styles").glob("*.css"),
-        RESOURCE_ROOT / "assets" / "prophet_icon_light.ico",
+        RESOURCE_ROOT / "assets" / "prophet_icon_light.png",
         *TRUSTED_SCRIPTS,
     ):
         assert path.is_file(), path
+    if ICON_PATH:
+        assert Path(ICON_PATH).is_file(), ICON_PATH
     document = docx.Document()
     document.add_paragraph("DOCX self-test")
     document_bytes = io.BytesIO()
@@ -163,7 +162,7 @@ def main() -> None:
 
     window.events.loaded += show_window
     api.set_window(window)
-    webview.start(icon=str(RESOURCE_ROOT / "assets" / "prophet_icon_light.ico"))
+    webview.start(icon=ICON_PATH)
 
 
 def report_self_test_failure(exc: BaseException) -> None:

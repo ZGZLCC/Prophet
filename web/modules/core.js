@@ -1,6 +1,10 @@
 (() => {
   "use strict";
 
+// 聊天导出只实现了 Windows 客户端；必须在 state 初始化之前声明，
+// 因为 state.route 会在初始化时调用 routeFromHash()。
+let chatExportSupported = true;
+
 const ROUTES = {
   profile: {
     title: "人物画像",
@@ -153,9 +157,15 @@ const state = {
 
 const $ = (selector, root = document) => root.querySelector(selector);
 
+function setChatExportSupported(value) {
+  chatExportSupported = Boolean(value);
+}
+
 function routeFromHash() {
   const route = window.location.hash.replace(/^#/, "");
-  return ROUTES[route] ? route : "profile";
+  if (!ROUTES[route]) return "profile";
+  if (route === "export" && !chatExportSupported) return "profile";
+  return route;
 }
 
 function escapeHtml(value) {
@@ -298,6 +308,7 @@ function taskLabel(status) {
     state,
     $,
     routeFromHash,
+    setChatExportSupported,
     escapeHtml,
     getApi,
     callApi,

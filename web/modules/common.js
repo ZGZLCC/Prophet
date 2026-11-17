@@ -175,11 +175,20 @@ async function refreshHealth() {
   }
 }
 
+function applyPlatformCapabilities(info) {
+  app.setChatExportSupported?.(info.chat_export);
+  if (info.chat_export) return;
+  // 聊天导出依赖 Windows 客户端实现：隐藏入口，并把停留在这个路由的页面切回人物画像。
+  document.querySelector('.nav-item[data-route="export"]')?.remove();
+  if (state.route === "export") window.location.hash = "profile";
+}
+
 async function connectBridge() {
   if (state.bridgeReady || !getApi()) return;
   try {
     const info = await callApi("get_app_info");
     state.bridgeReady = true;
+    applyPlatformCapabilities(info);
     setBridgeStatus("ok", info.local_only ? "本地桥接已连接" : "桥接已连接");
     setHealthStatus("loading", "正在读取本地状态", "检查两个本地数据库");
     const settingsTask = callApi("get_settings")

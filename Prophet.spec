@@ -1,3 +1,5 @@
+import os
+import sys
 from pathlib import Path
 
 from PyInstaller.utils.hooks import collect_data_files, collect_submodules
@@ -57,11 +59,15 @@ hiddenimports += [
     "person_profile.parsers",
     "person_profile.storage",
     "process_runner",
+    "platform_support",
     "profile_export",
     "storage",
-    "webview.platforms.winforms",
-    "winreg",
 ]
+
+if sys.platform == "win32":
+    hiddenimports += ["webview.platforms.winforms", "winreg"]
+elif sys.platform == "darwin":
+    hiddenimports += ["webview.platforms.cocoa"]
 
 a = Analysis(
     [str(ROOT / "desktop.py")],
@@ -83,13 +89,20 @@ a.datas = [
     and item[0].replace("\\", "/") != "pythonnet/runtime/Python.Runtime.xml"
 ]
 pyz = PYZ(a.pure)
+
+# Windows 用 .ico；macOS 用 build_macos.sh 生成的 .icns（通过 PROPHET_ICON 传入）。
+if sys.platform == "win32":
+    app_icon = str(ROOT / "assets" / "prophet_icon_light.ico")
+else:
+    app_icon = os.environ.get("PROPHET_ICON") or None
+
 exe = EXE(
     pyz,
     a.scripts,
     [],
     exclude_binaries=True,
     name="Prophet",
-    icon=str(ROOT / "assets" / "prophet_icon_light.ico"),
+    icon=app_icon,
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -104,3 +117,18 @@ coll = COLLECT(
     upx=False,
     name="Prophet",
 )
+
+if sys.platform == "darwin":
+    app = BUNDLE(
+        coll,
+        name="Prophet.app",
+        icon=app_icon,
+        bundle_identifier="com.zgzlcc.prophet",
+        info_plist={
+            "CFBundleName": "Prophet",
+            "CFBundleDisplayName": "Prophet",
+            "CFBundleShortVersionString": os.environ.get("PROPHET_VERSION", "1.0.0"),
+            "LSMinimumSystemVersion": "11.0",
+            "NSHighResolutionCapable": True,
+        },
+    )

@@ -34,13 +34,16 @@ desktop.py
 | `profile_export.py` | 兼容旧导入的薄封装，实际实现位于 `person_profile/export.py`。 |
 | `test_core.py` | 人物画像、解析、存储、桥接、导入导出等核心回归检查。 |
 | `test_fortune.py` | 术式引擎的固定样例一致性检查。 |
+| `platform_support.py` | 按平台解析用户数据目录、系统深色模式、窗口图标，并声明可用能力（`CHAT_EXPORT_SUPPORTED`）。 |
+| `build_windows.ps1` | Windows 打包：PyInstaller、复制文档、带超时与输出捕获的自检。 |
+| `build_macos.sh` | macOS 打包：生成 `.icns`、PyInstaller 打出 `.app`、自检。 |
 
 ## API 桥接层
 
 | 文件 | 功能 |
 |---|---|
 | `api/base.py` | `ApiBase`；应用路径、环境配置读取、输入校验、数据库定位、任务提交与状态查询。 |
-| `api/settings.py` | 设置读取/保存、健康检查、数据库目录迁移。 |
+| `api/settings.py` | 设置读取/保存、健康检查、数据库目录迁移，以及带版本和平台能力的 `get_app_info`。 |
 | `api/profile.py` | 人物、材料、画像版本、预测、复盘、导入和导出。 |
 | `api/chat.py` | 聊天导出、聊天文件检查、Agent 提示词、手动命令和一键分析。 |
 | `api/fortune.py` | 起盘、解读、术数档案、预测复盘和数据库维护。 |
@@ -97,11 +100,24 @@ desktop.py
 
 | 文件 | 功能 |
 |---|---|
-| `Prophet.spec` | PyInstaller 收集规则、动态模块、资源和排除项。 |
-| `build_windows.ps1` | 清理构建缓存、生成 `dist-native/Prophet` 并运行打包自检。 |
+| `Prophet.spec` | PyInstaller 收集规则、动态模块、资源和排除项；按平台切换窗口后端、图标，并在 macOS 上追加 `BUNDLE`。 |
+| `build_windows.ps1` | Windows：清理构建缓存、生成 `dist-native/Prophet` 并运行打包自检。 |
+| `build_macos.sh` | macOS：生成 `.icns`、生成 `dist-native/Prophet.app` 并运行打包自检。 |
 | `requirements.txt` | 正式运行依赖；当前原生桌面版不依赖 Streamlit。 |
 | `.env.example` | 模型、数据库、输出目录和限制参数模板。 |
-| `assets/` | Windows 图标、明暗主题页面图标、可编辑 SVG 源和许可证。 |
+| `assets/` | 应用图标、明暗主题页面图标、可编辑 SVG 源和许可证。 |
+
+## 平台差异
+
+| 能力 | Windows | macOS |
+|---|---|---|
+| 窗口后端 | `webview.platforms.winforms`（pythonnet + .NET Framework） | `webview.platforms.cocoa`（PyObjC） |
+| 用户数据目录 | `%LOCALAPPDATA%\Prophet` | `~/Library/Application Support/Prophet` |
+| 深色模式 | 注册表 `AppsUseLightTheme` | `defaults read -g AppleInterfaceStyle` |
+| 窗口图标 | `assets/prophet_icon_light.ico` | `.app` 内的 `.icns`（`build_macos.sh` 生成） |
+| 聊天导出 | 可用 | 不可用，前端隐藏入口（`CHAT_EXPORT_SUPPORTED`） |
+
+平台差异集中在 `platform_support.py`，其余模块不直接判断系统。聊天导出的可用性通过 `get_app_info()` 的 `chat_export` 字段传给前端，由 `web/modules/common.js` 隐藏导航并在必要时回退路由。
 
 ## 文档与数据目录
 

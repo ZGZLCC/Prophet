@@ -4,24 +4,40 @@
 
 Prophet 由 `desktop.py` 启动 pywebview 窗口，直接加载本地 HTML、CSS 和 JavaScript，**不启动 Web 服务，也不占用端口**。聊天原文、画像证据、结构化盘面和复盘结果都先落盘到本机 SQLite，模型只负责生成解释性内容。
 
-- 平台：Windows 10/11
+- 平台：Windows 10/11、macOS 11+（Apple Silicon）
 - 技术栈：Python 3.11+ / 原生 HTML、CSS、JavaScript
 - 许可：[MIT](LICENSE)
 
 ---
 
-## 下载安装（推荐）
+## 下载安装
 
 普通使用不需要配置 Python 环境，直接下载打包好的免安装版：
 
 **<https://github.com/ZGZLCC/Prophet/releases/latest>**
 
-下载 `Prophet-windows-x64.zip`，解压后双击 `Prophet.exe` 即可启动，关闭窗口即退出。压缩包旁附有 `.sha256`，可用 `Get-FileHash Prophet-windows-x64.zip -Algorithm SHA256` 核对。
+| 平台 | 下载 | 使用 |
+|---|---|---|
+| Windows | `Prophet-windows-x64.zip` | 解压后双击 `Prophet.exe` |
+| macOS（Apple Silicon） | `Prophet-macos-arm64.zip` | 解压后把 `Prophet.app` 拖进"应用程序" |
 
-首次启动会在 `%LOCALAPPDATA%\Prophet` 生成配置模板和两个数据库，之后所有用户数据都留在这个目录：
+压缩包旁附有 `.sha256`。Windows 可用 `Get-FileHash Prophet-windows-x64.zip -Algorithm SHA256` 核对，macOS 用 `shasum -a 256 Prophet-macos-arm64.zip`。
+
+macOS 包未做代码签名，首次打开会被 Gatekeeper 拦下。解决办法是**右键点 `Prophet.app` → 打开**，或执行一次：
+
+```bash
+xattr -dr com.apple.quarantine /Applications/Prophet.app
+```
+
+首次启动会生成配置模板和两个数据库，之后所有用户数据都留在这个目录：
+
+| 平台 | 数据目录 |
+|---|---|
+| Windows | `%LOCALAPPDATA%\Prophet` |
+| macOS | `~/Library/Application Support/Prophet` |
 
 ```text
-%LOCALAPPDATA%\Prophet\
+Prophet/
 ├─ .env          # 模型配置、主题、时区、默认目录
 ├─ data\
 │  ├─ sentiment.db   # 人物画像
@@ -35,7 +51,7 @@ Prophet 由 `desktop.py` 启动 pywebview 窗口，直接加载本地 HTML、CSS
 
 ## 目录
 
-- [下载安装（推荐）](#下载安装推荐)
+- [下载安装](#下载安装)
 - [它解决什么问题](#它解决什么问题)
 - [设计原则](#设计原则)
 - [功能](#功能)
@@ -83,11 +99,13 @@ Prophet 把这件事拆成可核对的两步：**先保存事实，再生成解�
 | 页面 | 能力 | 数据写入 |
 |---|---|---|
 | **人物画像** | 人物管理、直接输入或上传材料、分析并保存画像、预测与复盘、历史重建与回退、人物与数据库导出 | `data/sentiment.db` |
-| **聊天导出** | 从本机 QQ / 微信导出文字聊天，支持 JSON、TXT、CSV，可指定聊天对象、时间范围和保存目录 | 所选目录 |
+| **聊天导出** | 从本机 QQ / 微信导出文字聊天，支持 JSON、TXT、CSV，可指定聊天对象、时间范围和保存目录。**仅 Windows** | 所选目录 |
 | **聊天分析** | 选择 JSON/JSONL 聊天记录与目标发送者，通过智能助手提示词、手动命令或一键执行产出报告 | 所选目录 + `.chat-material-work/` |
 | **赛博算命** | 纯 Python 实现周易、梅花、六爻、八字、紫微、奇门和大六壬，提供独立档案、历史记录、规则检索和数据库导入导出 | `data/fortune.db` |
 
 QQ、微信导出和聊天分析都由项目内代码实现，不依赖项目目录外的脚本。
+
+macOS 上没有"聊天导出"入口：该功能依赖 Windows 客户端的进程内存、`tasklist` 和注册表，macOS 客户端没有对应实现。导出的聊天 JSON 仍然可以在 macOS 上导入做分析。
 
 ---
 
@@ -139,18 +157,18 @@ QQ、微信导出和聊天分析都由项目内代码实现，不依赖项目目
 
 ### 环境要求
 
-- Windows 10/11
+- Windows 10/11，或 macOS 11+（Apple Silicon）
 - Python 3.11 或更高版本（CI 使用 3.12）
 - 可选：一个模型服务。支持 OpenAI Responses、OpenAI-compatible Chat Completions 和 Ollama。不配置模型时，导出、算命、材料入库和画像查看都照常可用，只有"分析""预测""解读"相关按钮会被锁定。
-- QQ/微信导出需要对应客户端已登录，并允许脚本读取所需的本地文件或进程信息。
+- QQ/微信导出仅支持 Windows，且需要对应客户端已登录，并允许脚本读取所需的本地文件或进程信息。
 
 ### 安装
 
-```powershell
+```bash
 git clone https://github.com/ZGZLCC/Prophet.git
 cd Prophet
-py -3.11 -m venv .venv
-.\.venv\Scripts\Activate.ps1
+py -3.11 -m venv .venv          # macOS: python3.11 -m venv .venv
+.\.venv\Scripts\Activate.ps1    # macOS: source .venv/bin/activate
 python -m pip install -r requirements.txt
 ```
 
@@ -256,7 +274,10 @@ Prophet/
 │  ├─ prompts/                    # 分析提示词
 │  └─ references/                 # 报告格式说明
 ├─ process_runner.py              # 可取消的本机子进程执行
+├─ platform_support.py            # 平台数据目录、深色模式、窗口图标与能力开关
 ├─ assets/                        # 应用图标、主题自适应图标和许可说明
+├─ build_windows.ps1              # Windows 打包脚本
+├─ build_macos.sh                 # macOS 打包脚本（含 .icns 生成）
 ├─ test_core.py                   # 核心流程自检
 ├─ test_fortune.py                # 术式引擎对拍测试
 ├─ tests/fortune_fixtures/        # 术式引擎黄金样例
@@ -297,6 +318,7 @@ desktop.py → pywebview → web/ → app_api.py
 | `fortune/` | 纯 Python 术式引擎、规则语料、Schema 和独立数据层。 |
 | `exporters/` | Windows QQ/微信导出实现，只读。 |
 | `chat-material-extractor/` | 聊天规范化、分块、分期、模型调用和报告构建。 |
+| `platform_support.py` | 按平台解析数据目录、系统深色模式、窗口图标，并声明可用能力（如聊天导出）。 |
 
 `background_jobs.py` 承载聊天导出、聊天分析和模型解读等耗时任务，切换页面不会阻塞。`process_runner.py` 提供可取消的本机子进程执行。
 
@@ -324,29 +346,36 @@ desktop.py → pywebview → web/ → app_api.py
 
 ## 构建与发布
 
-免安装版由 GitHub Actions 在 `windows-latest` 上构建，本机不需要打包环境。
+免安装版由 GitHub Actions 构建，本机不需要打包环境：Windows 在 `windows-latest`，macOS 在 `macos-latest`（arm64）。
 
-**发布新版本**：推送版本标签即可，CI 会自动构建并发布 Release。
+**发布新版本**：推送版本标签即可，两个平台会同时构建并写进同一个 Release。
 
 ```powershell
 git tag v1.0.0
 git push origin v1.0.0
 ```
 
-Release 中会附上 `Prophet-windows-x64.zip` 和对应的 `.sha256`。构建流程见 [.github/workflows/build-windows.yml](.github/workflows/build-windows.yml)：先跑一遍自检，再打包，然后对产物执行 `--self-test`，只有全部通过才会发布。推到 `main` 或提交 PR 时也会构建，但不发布，只保留 Actions artifact（默认 30 天）。
+Release 中会附上 `Prophet-windows-x64.zip`、`Prophet-macos-arm64.zip` 及各自的 `.sha256`。构建流程见 [.github/workflows/build-windows.yml](.github/workflows/build-windows.yml) 与 [.github/workflows/build-macos.yml](.github/workflows/build-macos.yml)：先跑一遍自检，再打包，然后对产物执行 `--self-test`，只有全部通过才会发布。推到 `main` 或提交 PR 时也会构建，但不发布，只保留 Actions artifact（默认 30 天）。
 
-> 面向普通用户请始终使用 Release 里的压缩包。Actions artifact 由 GitHub 自己再包一层 zip，下载后需要解压两次。
+> 面向普通用户请始终使用 Release 里的压缩包。Actions artifact 由 GitHub 自己再包一层 zip：Windows 的 artifact 里是文件，解压一次即可；macOS 的 `.app` 必须保持可执行权限，所以 artifact 里放的是完整 zip，需要解压两次。
 
-**本地构建**（可选）：
+**本地构建**（可选，必须在目标平台上执行，PyInstaller 无法交叉编译）：
 
 ```powershell
+# Windows
 .\.venv\Scripts\python.exe -m pip install "pyinstaller>=6.15,<7"
 .\build_windows.ps1
 ```
 
-产物位于 `dist-native/Prophet`。构建脚本会自动选用 `.venv\Scripts\python.exe`，也可以用 `-Python` 指定其他解释器；产物内含 `README.md`、`.env.example`、`LICENSE` 和 `NOTICE.md`，构建结束时会对 `Prophet.exe` 执行一次 `--self-test`。
+```bash
+# macOS
+pip install "pyinstaller>=6.15,<7"
+bash ./build_macos.sh
+```
 
-`--self-test` 除了校验依赖、解析器和术式引擎，还会加载一次 pywebview 的窗口后端。缺 pythonnet 或 .NET Framework 不可用时，它会在打包阶段就失败并给出原因，而不是等到双击才弹出错误框。
+产物分别是 `dist-native/Prophet`（Windows）和 `dist-native/Prophet.app`（macOS）。Windows 脚本会自动选用 `.venv\Scripts\python.exe`，也可以用 `-Python` 指定其他解释器；macOS 脚本会用 `sips` 和 `iconutil` 从 `assets/prophet_icon_light.png` 合成 `.icns`。两个脚本都会在结束时对产物执行一次 `--self-test`。
+
+`--self-test` 除了校验依赖、解析器和术式引擎，还会加载一次 pywebview 的窗口后端：Windows 检查 `webview.platforms.winforms`（pythonnet + .NET Framework），macOS 检查 `webview.platforms.cocoa`（PyObjC）。缺依赖时会在打包阶段就失败并给出原因，而不是等到双击才弹出错误框。
 
 ---
 
@@ -355,14 +384,14 @@ Release 中会附上 `Prophet-windows-x64.zip` 和对应的 `.sha256`。构建�
 在项目根目录执行：
 
 ```powershell
-.\.venv\Scripts\python.exe -m compileall -q desktop.py app_api.py api person_profile analysis.py storage.py parsers.py profile_export.py chat_export.py chat_analysis.py fortune_app.py
+.\.venv\Scripts\python.exe -m compileall -q desktop.py app_api.py api person_profile analysis.py storage.py parsers.py profile_export.py chat_export.py chat_analysis.py fortune_app.py platform_support.py
 .\.venv\Scripts\python.exe test_core.py
 .\.venv\Scripts\python.exe test_fortune.py
 .\.venv\Scripts\python.exe desktop.py --self-test
 .\.venv\Scripts\python.exe chat-material-extractor\scripts\extract.py self-test
 ```
 
-改动源码、前端、配置或文档后，重新执行 `build_windows.ps1` 并确认 `dist-native/Prophet/Prophet.exe --self-test` 通过。
+改动源码、前端、配置或文档后，重新执行对应平台的打包脚本（`build_windows.ps1` / `build_macos.sh`）并确认产物 `--self-test` 通过。
 
 提交前请确保没有把 `.env`、数据库文件、导出结果或构建产物加入版本库。
 
