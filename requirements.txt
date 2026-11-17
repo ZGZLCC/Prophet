@@ -7,6 +7,10 @@ pywebview>=5,<7
 lunar-python>=1.4,<2
 izthon>=0.2,<0.3
 
+# Windows 没有系统时区库，zoneinfo.ZoneInfo("Asia/Shanghai") 依赖 tzdata。
+# 必须显式声明：否则源码运行和打包产物都会在导入 fortune_app 时崩溃。
+tzdata>=2024.1
+
 # pywebview 的 Windows 后端依赖 .NET 互操作；锁版本以保证发布包可复现。
 # 这两个包由 pywebview 间接引入，不写死的话每次构建可能拿到不同的运行时。
 pythonnet==3.1.0

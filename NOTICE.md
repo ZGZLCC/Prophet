@@ -45,6 +45,7 @@
 | pywebview | 桌面窗口宿主 | BSD-3-Clause |
 | lunar-python | 农历与节气换算 | MIT |
 | izthon | 紫微斗数排盘内核（固定 `0.2.x`） | MIT |
+| tzdata | Windows 上的 IANA 时区数据（`ZoneInfo` 依赖） | Apache-2.0 |
 
 构建免安装版时另需 PyInstaller（GPL-2.0-or-later，带启动器例外）；它只用于打包，不是运行时依赖。
 

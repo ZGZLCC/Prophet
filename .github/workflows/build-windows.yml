@@ -36,13 +36,21 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt "pyinstaller>=6.15,<7"
 
+      # 每一步单独判断退出码。Windows runner 默认用 PowerShell，而 PowerShell 只会
+      # 用最后一条命令的退出码决定该步成败，中间失败会被后面的成功掩盖。
       - name: Run self-checks
+        shell: pwsh
         run: |
           python -m compileall -q desktop.py app_api.py api person_profile analysis.py storage.py parsers.py profile_export.py chat_export.py chat_analysis.py fortune_app.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           python test_core.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           python test_fortune.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           python desktop.py --self-test
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           python chat-material-extractor/scripts/extract.py self-test
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
       - name: Build package
         shell: pwsh

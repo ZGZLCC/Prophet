@@ -1,10 +1,14 @@
 from pathlib import Path
 
-from PyInstaller.utils.hooks import collect_data_files
+from PyInstaller.utils.hooks import collect_data_files, collect_submodules
 
 
 ROOT = Path(SPECPATH)
 datas = collect_data_files("izthon", includes=["i18n/_catalogs/*.json"])
+
+# Windows 没有系统时区库，zoneinfo 在运行期才惰性导入 tzdata。
+# 显式收集，避免打包产物里缺失后在启动时抛 ZoneInfoNotFoundError。
+datas += collect_data_files("tzdata")
 binaries = []
 hiddenimports = [
     "izthon.astro.astro",
@@ -14,6 +18,7 @@ hiddenimports = [
     "izthon.star.location",
     "izthon.star.major_star",
     "izthon.star.minor_star",
+    *collect_submodules("tzdata"),
 ]
 
 datas += [
