@@ -9,6 +9,8 @@ from typing import Any, Mapping
 
 from person_profile import analysis
 
+APP_VERSION = "1.0.0"
+
 TIME_ZONES = {
     "Asia/Shanghai": "北京",
     "Asia/Hong_Kong": "香港",
@@ -54,7 +56,7 @@ class SettingsApiMixin:
         return self._ok(
             {
                 "name": "Prophet",
-                "version": None,
+                "version": APP_VERSION,
                 "shell": "pywebview",
                 "local_only": True,
                 "streamlit": False,
