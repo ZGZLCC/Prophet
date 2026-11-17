@@ -54,6 +54,7 @@ hiddenimports += [
     "process_runner",
     "profile_export",
     "storage",
+    "webview.platforms.winforms",
     "winreg",
 ]
 

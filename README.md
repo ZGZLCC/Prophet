@@ -216,12 +216,27 @@ LLM_MODEL=你的模型名
 
 ## 打包免安装版
 
+### 由 GitHub Actions 构建（推荐）
+
+推送版本标签后由 CI 在 `windows-latest` 上构建并直接发布 Release，本机不需要安装打包环境：
+
+```powershell
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+Release 中会附上 `Prophet-windows-x64.zip` 和对应的 `.sha256`。解压后双击 `Prophet.exe` 即可启动，关闭窗口即退出。
+
+构建流程见 [.github/workflows/build-windows.yml](.github/workflows/build-windows.yml)：先跑一遍自检，再打包，然后对产物执行 `--self-test`，只有全部通过才会发布。推到 `main` 或提交 PR 时也会构建，但不发布，只保留 Actions artifact（默认 30 天）。
+
+### 本地构建
+
 ```powershell
 .\.venv\Scripts\python.exe -m pip install "pyinstaller>=6.15,<7"
 .\build_windows.ps1
 ```
 
-产物位于 `dist-native/Prophet`，双击其中的 `Prophet.exe` 即可启动，关闭窗口即退出。构建产物内含 `README.md`、`.env.example`、`LICENSE` 和 `NOTICE.md`，并在构建结束时对 `Prophet.exe` 执行一次 `--self-test`。
+产物位于 `dist-native/Prophet`。构建脚本会自动选用 `.venv\Scripts\python.exe`，也可以用 `-Python` 指定其他解释器。构建产物内含 `README.md`、`.env.example`、`LICENSE` 和 `NOTICE.md`，并在构建结束时对 `Prophet.exe` 执行一次 `--self-test`。
 
 免安装版的数据库、导出结果和模型配置统一保存在 `%LOCALAPPDATA%\Prophet`，首次启动自动生成 `.env` 配置模板。发布包不包含项目本地的 `.env`、数据库或聊天记录。
 
@@ -274,6 +289,7 @@ Prophet/
 ├─ tests/fortune_fixtures/        # 术式引擎黄金样例
 ├─ docs/CODE_STRUCTURE.md         # 代码职责和调用关系
 ├─ docs/DESIGN-webflow.md         # 前端视觉设计参考
+├─ .github/workflows/             # CI：构建、自检并发布免安装版
 ├─ requirements.txt               # Python 依赖
 ├─ .env.example                   # 配置模板
 ├─ LICENSE                        # 项目主许可证
@@ -353,6 +369,9 @@ desktop.py → pywebview → web/ → app_api.py
 **`build_windows.ps1` 被 PowerShell 拦住了？**
 执行策略阻止了本地脚本。用 `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass` 放开当前会话后重试。
 
+**双击后提示 `Failed to resolve Python.Runtime.Loader.Initialize`？**
+这不是应用代码的问题，而是本机的 .NET 互操作环境异常：pywebview 的窗口后端加载 pythonnet 失败。先跑 `.\.venv\Scripts\python.exe -c "import clr"`，同样报错即可确认。修复方向是重装或回退 .NET Framework 更新，或改用可以正常构建的环境——直接下载 Release 里的 `Prophet-windows-x64.zip` 通常最省事。
+
 **术数结果能当预测用吗？**
 不能。盘面是确定性算法输出，解读是模型生成的推断。项目不提供心理诊断、医学建议、投资建议，也不保证任何应期。
 
@@ -371,6 +390,8 @@ desktop.py → pywebview → web/ → app_api.py
 ```
 
 改动源码、前端、配置或文档后，重新执行 `build_windows.ps1` 并确认 `dist-native/Prophet/Prophet.exe --self-test` 通过。
+
+`--self-test` 除了校验依赖、解析器和术式引擎，还会加载一次 pywebview 的窗口后端。缺 pythonnet 或 .NET Framework 不可用时，它会在打包阶段就失败并给出原因，而不是等到双击才弹出错误框。
 
 提交前请确保没有把 `.env`、数据库文件、导出结果或构建产物加入版本库。
 

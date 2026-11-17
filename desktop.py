@@ -67,6 +67,27 @@ def system_uses_dark_mode() -> bool:
         return False
 
 
+def check_gui_backend() -> None:
+    """确认 pywebview 的窗口后端能加载。
+
+    缺 pythonnet、.NET Framework 不可用或位数不匹配时，``webview.start()`` 会直接抛异常；
+    在自检里提前加载一次，让构建失败在打包阶段就暴露，而不是等到用户双击才发现。
+    """
+    import importlib
+    import platform
+
+    if platform.system() != "Windows":
+        return
+    try:
+        importlib.import_module("webview.platforms.winforms")
+    except Exception as exc:  # noqa: BLE001 - ImportError、RuntimeError 都会出现
+        raise RuntimeError(
+            "pywebview 的 WinForms 后端加载失败，窗口无法启动；"
+            "请检查 pythonnet 与 .NET Framework 4.8 是否可用。"
+            f"原始错误：{type(exc).__name__}: {exc}"
+        ) from exc
+
+
 def run_self_test() -> None:
     prepare_app_home()
     import io
@@ -113,6 +134,7 @@ def run_self_test() -> None:
     )["engineId"] == "ziwei"
     assert AppApi(resource_root=RESOURCE_ROOT, app_home=APP_HOME).get_app_info()["ok"]
     assert all((cryptography, docx, izthon, lunar_python, openpyxl, pypdf, webview))
+    check_gui_backend()
     print("native desktop self-check passed")
 
 
@@ -144,8 +166,25 @@ def main() -> None:
     webview.start(icon=str(RESOURCE_ROOT / "assets" / "prophet_icon_light.ico"))
 
 
+def report_self_test_failure(exc: BaseException) -> None:
+    """把自检失败写到可用流并返回退出码。
+
+    打包版是窗口程序，未捕获异常会弹模态错误框，让 ``build_windows.ps1`` 一直等下去；
+    这里改为安静地以非零码退出。
+    """
+    message = f"self-check failed: {type(exc).__name__}: {exc}"
+    for stream in (sys.stderr, sys.stdout):
+        if stream is not None:
+            print(message, file=stream)
+            return
+
+
 if __name__ == "__main__":
     if sys.argv[1:] == ["--self-test"]:
-        run_self_test()
+        try:
+            run_self_test()
+        except BaseException as exc:  # noqa: BLE001 - 自检要覆盖断言失败和环境异常
+            report_self_test_failure(exc)
+            sys.exit(1)
     else:
         main()

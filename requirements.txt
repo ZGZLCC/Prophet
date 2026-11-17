@@ -6,3 +6,8 @@ cryptography>=43,<47
 pywebview>=5,<7
 lunar-python>=1.4,<2
 izthon>=0.2,<0.3
+
+# pywebview 的 Windows 后端依赖 .NET 互操作；锁版本以保证发布包可复现。
+# 这两个包由 pywebview 间接引入，不写死的话每次构建可能拿到不同的运行时。
+pythonnet==3.1.0
+clr-loader==0.3.1
