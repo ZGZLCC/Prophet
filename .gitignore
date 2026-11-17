@@ -30,6 +30,7 @@ release/
 *.db-wal
 *.tmp
 *.bak
+*.log
 
 # 本地留档目录
 baseline/

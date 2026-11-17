@@ -167,15 +167,17 @@ def main() -> None:
 
 
 def report_self_test_failure(exc: BaseException) -> None:
-    """把自检失败写到可用流并返回退出码。
+    """把自检失败的完整 traceback 写到可用流。
 
-    打包版是窗口程序，未捕获异常会弹模态错误框，让 ``build_windows.ps1`` 一直等下去；
-    这里改为安静地以非零码退出。
+    打包版是窗口程序，没有控制台时 ``sys.stderr`` 和 ``sys.stdout`` 都是 None，
+    异常会完全丢失；构建脚本用重定向抓取的正是这条流。
     """
-    message = f"self-check failed: {type(exc).__name__}: {exc}"
+    import traceback
+
+    text = "".join(traceback.format_exception(exc))
     for stream in (sys.stderr, sys.stdout):
         if stream is not None:
-            print(message, file=stream)
+            print(text, file=stream, end="")
             return
 
 
