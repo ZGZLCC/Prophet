@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:fortune-telling:schema:forecast-statistics:1.0.0",
+  "title": "ForecastStatistics",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "generatedAt", "filters", "sample", "rates", "minimumSampleSize", "warnings", "byEngine", "byCategory", "byRuleProfile", "byModelPrompt", "records"],
+  "properties": {
+    "schemaVersion": { "const": "fortune-statistics.v1" },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "filters": { "type": "object", "additionalProperties": true },
+    "sample": { "type": "object", "required": ["total", "resolved", "pending", "overdue", "confirmed", "partiallyConfirmed", "notConfirmed", "unknown"], "properties": { "total": { "type": "integer", "minimum": 0 }, "resolved": { "type": "integer", "minimum": 0 }, "pending": { "type": "integer", "minimum": 0 }, "overdue": { "type": "integer", "minimum": 0 }, "confirmed": { "type": "integer", "minimum": 0 }, "partiallyConfirmed": { "type": "integer", "minimum": 0 }, "notConfirmed": { "type": "integer", "minimum": 0 }, "unknown": { "type": "integer", "minimum": 0 } } },
+    "rates": { "type": "object", "required": ["confirmedRate", "resolutionRate"], "properties": { "confirmedRate": { "type": ["number", "null"], "minimum": 0, "maximum": 1 }, "resolutionRate": { "type": ["number", "null"], "minimum": 0, "maximum": 1 } } },
+    "minimumSampleSize": { "type": "integer", "minimum": 1 },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "byEngine": { "type": "array", "items": { "$ref": "#/$defs/group" } },
+    "byCategory": { "type": "array", "items": { "$ref": "#/$defs/group" } },
+    "byRuleProfile": { "type": "array", "items": { "$ref": "#/$defs/group" } },
+    "byModelPrompt": { "type": "array", "items": { "$ref": "#/$defs/group" } },
+    "records": { "type": "array", "items": { "$ref": "#/$defs/record" }, "maxItems": 500 }
+  },
+  "$defs": {
+    "group": { "type": "object", "required": ["key", "total", "resolved", "confirmedRate"], "properties": { "key": { "type": "string" }, "total": { "type": "integer" }, "resolved": { "type": "integer" }, "confirmedRate": { "type": ["number", "null"], "minimum": 0, "maximum": 1 } } },
+    "record": { "type": "object", "required": ["claimId", "readingId", "engineRunId", "engineId", "engineVersion", "ruleProfileId", "statement", "claimStatus", "resultStatus", "hasMovingLines", "models", "promptProfiles", "promptVersions", "createdAt"], "properties": { "claimId": { "type": "string" }, "readingId": { "type": "string" }, "engineRunId": { "type": "string" }, "engineId": { "type": "string" }, "engineVersion": { "type": "string" }, "ruleProfileId": { "type": "string" }, "category": { "type": "string" }, "statement": { "type": "string" }, "targetStart": { "type": "string", "format": "date-time" }, "targetEnd": { "type": "string", "format": "date-time" }, "claimStatus": { "enum": ["draft", "locked", "resolved", "void"] }, "resultStatus": { "enum": ["confirmed", "partially-confirmed", "not-confirmed", "unknown", "pending", "overdue"] }, "outcomeId": { "type": "string" }, "outcomeNote": { "type": "string" }, "hasMovingLines": { "type": "boolean" }, "models": { "type": "array", "items": { "type": "string" } }, "promptProfiles": { "type": "array", "items": { "type": "string" } }, "promptVersions": { "type": "array", "items": { "type": "string" } }, "createdAt": { "type": "string", "format": "date-time" } } }
+  }
+}

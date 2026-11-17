@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:fortune-telling:schema:history-record:1.0.0",
+  "title": "HistoryRecord",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "id", "savedAt", "favorite", "reading"],
+  "properties": {
+    "schemaVersion": { "const": "fortune-history-record.v1" },
+    "id": { "type": "string", "minLength": 1, "maxLength": 120 },
+    "savedAt": { "type": "string", "format": "date-time" },
+    "favorite": { "type": "boolean" },
+    "reading": { "$ref": "#/$defs/reading" },
+    "forecastClaims": {
+      "type": "array",
+      "items": { "$ref": "reading-record-v2.schema.json#/$defs/forecastClaim" },
+      "maxItems": 100
+    },
+    "outcomes": {
+      "type": "array",
+      "items": { "$ref": "reading-record-v2.schema.json#/$defs/outcome" },
+      "maxItems": 100
+    }
+  },
+  "$defs": {
+    "reading": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "input", "facts", "evidence"],
+      "properties": {
+        "schemaVersion": { "const": "fortune-cast.v1" },
+        "engineId": { "enum": ["zhouyi-textual", "meihua-yishu"] },
+        "input": {
+          "oneOf": [
+            {
+              "allOf": [
+                { "$ref": "cast-input.schema.json" },
+                { "required": ["castAt", "timezone"] }
+              ]
+            },
+            { "$ref": "meihua-input.schema.json" }
+          ]
+        },
+        "facts": { "oneOf": [{ "$ref": "hexagram-facts.schema.json" }, { "$ref": "meihua-facts.schema.json" }] },
+        "evidence": { "$ref": "#/$defs/evidence" },
+        "interpretation": { "$ref": "#/$defs/interpretation" }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["passages", "usedChars", "maxChars", "truncated"],
+      "properties": {
+        "passages": {
+          "type": "array",
+          "items": { "oneOf": [{ "$ref": "source-passage.schema.json" }, { "$ref": "meihua-rule-passage.schema.json" }] },
+          "maxItems": 100
+        },
+        "usedChars": { "type": "integer", "minimum": 0, "maximum": 30000 },
+        "maxChars": { "type": "integer", "minimum": 1, "maximum": 30000 },
+        "truncated": { "type": "boolean" },
+        "omittedPassageIds": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "maxLength": 120 },
+          "maxItems": 100
+        }
+      }
+    },
+    "interpretation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text", "provider", "generatedAt", "citations", "invalidCitations"],
+      "properties": {
+        "text": { "type": "string", "minLength": 1, "maxLength": 100000 },
+        "provider": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "generatedAt": { "type": "string", "format": "date-time" },
+        "citations": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "maxLength": 120 },
+          "maxItems": 100
+        },
+        "invalidCitations": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "maxLength": 120 },
+          "maxItems": 100
+        },
+        "warning": { "type": "string", "minLength": 1, "maxLength": 100 }
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:fortune-telling:schema:liuren-input:1.0.0",
+  "title": "LiurenInput",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["question", "category"],
+  "properties": {
+    "question": { "type": "string", "minLength": 1, "maxLength": 1000 },
+    "category": { "enum": ["career", "relationship", "finance", "travel", "lost-item", "other"] },
+    "castAt": { "type": "string", "format": "date-time" },
+    "timezone": { "type": "string", "minLength": 1, "maxLength": 100 },
+    "timePolicyId": { "type": "string", "enum": ["civil-standard-time-v1", "traditional-zi-chu-li-chun-v1", "traditional-zi-zheng-li-chun-v1"] }
+  }
+}

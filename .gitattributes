@@ -1,0 +1,8 @@
+# 统一在版本库中使用 LF，避免 Windows 与 CI 之间产生纯换行差异
+* text=auto eol=lf
+
+# 二进制资源，不做换行和文本差异处理
+*.png binary
+*.ico binary
+*.zip binary
+*.db binary

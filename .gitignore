@@ -1,0 +1,46 @@
+# Python 缓存和测试产物
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage*
+htmlcov/
+build/
+dist/
+build-native/
+dist-native/
+release/
+
+# 本地环境和密钥
+.venv/
+.env
+.env.*
+!.env.example
+
+# 应用运行时数据：数据库、聊天分析工作目录和导出文件不提交
+# /data/ 与 /output/ 只匹配项目根目录，避免误伤 fortune/data 等随源码分发的资源
+/data/
+/output/
+.chat-material-work/
+*.db
+*.sqlite
+*.sqlite3
+*.db-shm
+*.db-wal
+*.tmp
+*.bak
+
+# 本地留档目录
+baseline/
+
+# 仅本地保留、不随源码发布的文档
+AGENTS.md
+docs/PROJECT_PLAN.md
+docs/LIGHTWEIGHT_REFACTOR_PLAN.md
+
+# 编辑器和操作系统文件
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

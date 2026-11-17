@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:fortune-telling:schema:history-export:1.0.0",
+  "title": "HistoryExport",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "version", "exportedAt", "records"],
+  "properties": {
+    "format": { "const": "fortune-telling-history" },
+    "version": { "const": 1 },
+    "exportedAt": { "type": "string", "format": "date-time" },
+    "records": {
+      "type": "array",
+      "items": { "$ref": "export-record.schema.json" },
+      "maxItems": 100
+    }
+  }
+}

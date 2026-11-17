@@ -1,0 +1,267 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:fortune-telling:schema:reading-record:2.0.0",
+  "title": "ReadingRecordV2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "id", "session", "engineRuns", "interpretations", "syntheses", "forecastClaims", "outcomes", "favorite", "createdAt", "updatedAt"],
+  "properties": {
+    "schemaVersion": { "const": "fortune-reading-record.v2" },
+    "id": { "type": "string", "minLength": 1, "maxLength": 120 },
+    "session": { "$ref": "#/$defs/session" },
+    "engineRuns": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/engineRun" }
+    },
+    "interpretations": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/interpretation" }
+    },
+    "syntheses": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/synthesis" },
+      "maxItems": 20
+    },
+    "forecastClaims": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/forecastClaim" },
+      "maxItems": 100
+    },
+    "outcomes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/outcome" },
+      "maxItems": 100
+    },
+    "favorite": { "type": "boolean" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "session": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "question", "localDateTime", "timezone", "utcDateTime", "tags", "createdAt", "updatedAt"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "type": { "enum": ["event", "natal", "research"] },
+        "question": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "category": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "localDateTime": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "timezone": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "utcDateTime": { "type": "string", "format": "date-time" },
+        "location": { "$ref": "#/$defs/location" },
+        "tags": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 100 }, "maxItems": 50 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "location": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string", "maxLength": 200 },
+        "latitude": { "type": "number", "minimum": -90, "maximum": 90 },
+        "longitude": { "type": "number", "minimum": -180, "maximum": 180 }
+      }
+    },
+    "engineRun": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "id", "sessionId", "engineId", "engineVersion", "ruleProfileId", "input", "facts", "rules", "evidence", "inputHash", "factsHash", "createdAt"],
+      "properties": {
+        "schemaVersion": { "const": "fortune-engine-run.v2" },
+        "id": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "sessionId": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "engineId": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "engineVersion": { "type": "string", "minLength": 1, "maxLength": 40 },
+        "ruleProfileId": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "input": { "type": "object" },
+        "facts": { "type": "object" },
+        "rules": { "$ref": "#/$defs/rules" },
+        "evidence": { "$ref": "#/$defs/evidence" },
+        "inputHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "factsHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profile", "time"],
+      "properties": {
+        "profile": { "type": "object", "required": ["profileId", "engineId", "version", "tradition", "timePolicyId", "ruleSetIds", "sourceRefs", "conflictNotes", "status", "createdAt"] },
+        "time": { "type": "object", "required": ["localDateTime", "timezone", "utcDateTime", "utcOffsetMinutes", "isDaylightSavingTime", "timePolicyId", "calculationDateTime"] },
+        "calendar": { "$ref": "#/$defs/calendarContext" }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["passages", "usedChars", "maxChars", "truncated", "omittedPassageIds"],
+      "properties": {
+        "passages": { "type": "array", "items": { "oneOf": [{ "$ref": "source-passage.schema.json" }, { "$ref": "meihua-rule-passage.schema.json" }, { "$ref": "liuyao-rule-passage.schema.json" }, { "$ref": "bazi-rule-passage.schema.json" }, { "$ref": "ziwei-rule-passage.schema.json" }, { "$ref": "qimen-rule-passage.schema.json" }, { "$ref": "liuren-rule-passage.schema.json" }] }, "maxItems": 100 },
+        "usedChars": { "type": "integer", "minimum": 0, "maximum": 30000 },
+        "maxChars": { "type": "integer", "minimum": 1, "maximum": 30000 },
+        "truncated": { "type": "boolean" },
+        "omittedPassageIds": { "type": "array", "items": { "type": "string" }, "maxItems": 100 }
+      }
+    },
+    "interpretation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "id", "engineRunId", "provider", "promptProfileId", "promptVersion", "evidenceHash", "contentMarkdown", "citationValidation", "createdAt"],
+      "properties": {
+        "schemaVersion": { "const": "fortune-interpretation.v2" },
+        "id": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "engineRunId": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "provider": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "model": { "type": "string", "maxLength": 200 },
+        "adapter": { "type": "string", "maxLength": 100 },
+        "promptProfileId": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "promptVersion": { "type": "string", "minLength": 1, "maxLength": 40 },
+        "evidenceHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "contentMarkdown": { "type": "string", "minLength": 1, "maxLength": 100000 },
+        "citationValidation": { "$ref": "#/$defs/citationValidation" },
+        "finishReason": { "type": "string", "maxLength": 100 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "citationValidation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["citations", "invalidCitations"],
+      "properties": {
+        "citations": { "type": "array", "items": { "type": "string" }, "maxItems": 100 },
+        "invalidCitations": { "type": "array", "items": { "type": "string" }, "maxItems": 100 },
+        "warning": { "type": "string", "maxLength": 100 }
+      }
+    },
+    "calendarContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["adapterId", "adapterVersion", "effectiveLocalDateTime", "gregorianYear", "gregorianMonth", "gregorianDay", "lunar", "yearNumber", "yearBranchNumber", "yearBranch", "hourBranchNumber", "hourBranch", "dayBoundaryApplied", "solarTerm"],
+      "properties": {
+        "adapterId": { "type": "string", "minLength": 1 },
+        "adapterVersion": { "type": "string", "minLength": 1 },
+        "effectiveLocalDateTime": { "type": "string", "minLength": 1 },
+        "gregorianYear": { "type": "integer" },
+        "gregorianMonth": { "type": "integer", "minimum": 1, "maximum": 12 },
+        "gregorianDay": { "type": "integer", "minimum": 1, "maximum": 31 },
+        "lunar": { "$ref": "#/$defs/lunarDate" },
+        "yearNumber": { "type": "integer" },
+        "yearStemNumber": { "type": "integer", "minimum": 1, "maximum": 10 },
+        "yearStem": { "type": "string", "minLength": 1, "maxLength": 2 },
+        "yearBranchNumber": { "type": "integer", "minimum": 1, "maximum": 12 },
+        "yearBranch": { "type": "string", "minLength": 1, "maxLength": 2 },
+        "monthStemNumber": { "type": "integer", "minimum": 1, "maximum": 10 },
+        "monthStem": { "type": "string", "minLength": 1, "maxLength": 2 },
+        "monthBranchNumber": { "type": "integer", "minimum": 1, "maximum": 12 },
+        "monthBranch": { "type": "string", "minLength": 1, "maxLength": 2 },
+        "dayStemNumber": { "type": "integer", "minimum": 1, "maximum": 10 },
+        "dayStem": { "type": "string", "minLength": 1, "maxLength": 2 },
+        "dayBranchNumber": { "type": "integer", "minimum": 1, "maximum": 12 },
+        "dayBranch": { "type": "string", "minLength": 1, "maxLength": 2 },
+        "dayGanZhiIndex": { "type": "integer", "minimum": 0, "maximum": 59 },
+        "hourBranchNumber": { "type": "integer", "minimum": 1, "maximum": 12 },
+        "hourBranch": { "type": "string", "minLength": 1, "maxLength": 2 },
+        "dayBoundaryApplied": { "type": "boolean" },
+        "solarTerm": { "$ref": "#/$defs/solarTermPair" }
+      }
+    },
+    "lunarDate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["calendar", "year", "month", "day", "isLeapMonth"],
+      "properties": {
+        "calendar": { "const": "chinese-lunisolar" },
+        "year": { "type": "integer" },
+        "month": { "type": "integer", "minimum": 1, "maximum": 12 },
+        "day": { "type": "integer", "minimum": 1, "maximum": 30 },
+        "isLeapMonth": { "type": "boolean" },
+        "yearName": { "type": "string", "maxLength": 20 }
+      }
+    },
+    "solarTermPair": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "current": { "$ref": "#/$defs/solarTerm" },
+        "next": { "$ref": "#/$defs/solarTerm" }
+      }
+    },
+    "solarTerm": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["index", "name", "longitude", "instant", "localDateTime"],
+      "properties": {
+        "index": { "type": "integer", "minimum": 0, "maximum": 23 },
+        "name": { "type": "string", "minLength": 1, "maxLength": 10 },
+        "longitude": { "type": "number", "minimum": 0, "maximum": 360 },
+        "instant": { "type": "string", "format": "date-time" },
+        "localDateTime": { "type": "string", "minLength": 1 }
+      }
+    },
+    "forecastClaim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "id", "readingId", "engineRunId", "statement", "dimensions", "status", "createdAt", "updatedAt"],
+      "properties": {
+        "schemaVersion": { "const": "fortune-forecast-claim.v1" },
+        "id": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "readingId": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "engineRunId": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "statement": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "targetAt": { "type": "string", "format": "date-time" },
+        "targetStart": { "type": "string", "format": "date-time" },
+        "targetEnd": { "type": "string", "format": "date-time" },
+        "observableCriteria": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "direction": { "enum": ["favorable", "unfavorable", "neutral", "uncertain"] },
+        "confidenceLabel": { "enum": ["low", "medium", "high", "unknown"] },
+        "dimensions": { "type": "object", "additionalProperties": { "type": "string", "minLength": 1, "maxLength": 200 } },
+        "tags": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 100 }, "maxItems": 30 },
+        "status": { "enum": ["draft", "locked", "resolved", "void"] },
+        "lockedAt": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "outcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "id", "claimId", "status", "observedAt", "note", "createdAt"],
+      "properties": {
+        "schemaVersion": { "const": "fortune-outcome.v1" },
+        "id": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "claimId": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "status": { "enum": ["confirmed", "partially-confirmed", "not-confirmed", "unknown"] },
+        "observedAt": { "type": "string", "format": "date-time" },
+        "note": { "type": "string", "minLength": 1, "maxLength": 5000 },
+        "evidence": { "type": "string", "maxLength": 5000 },
+        "reviewedAt": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "synthesis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "id", "sessionId", "engineRunIds", "provider", "promptProfileId", "promptVersion", "factsHashes", "contentMarkdown", "citationValidation", "createdAt"],
+      "properties": {
+        "schemaVersion": { "const": "fortune-synthesis.v1" },
+        "id": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "sessionId": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "engineRunIds": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 120 }, "minItems": 2, "maxItems": 3 },
+        "provider": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "model": { "type": "string", "maxLength": 200 },
+        "adapter": { "type": "string", "maxLength": 100 },
+        "promptProfileId": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "promptVersion": { "type": "string", "minLength": 1, "maxLength": 40 },
+        "factsHashes": { "type": "array", "items": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }, "minItems": 2, "maxItems": 3 },
+        "contentMarkdown": { "type": "string", "minLength": 1, "maxLength": 100000 },
+        "citationValidation": { "$ref": "#/$defs/citationValidation" },
+        "finishReason": { "type": "string", "maxLength": 100 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    }
+  }
+}

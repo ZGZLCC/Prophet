@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:fortune-telling:schema:meihua-facts:1.0.0",
+  "title": "MeihuaFacts",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "engineId", "method", "lines", "primary", "changed", "mutual", "movingLine", "movingLines", "upperTrigram", "lowerTrigram", "body", "use", "fiveElements", "sourceNumbers", "readingPolicy", "ruleProfile", "engineVersion"],
+  "properties": {
+    "schemaVersion": { "const": "fortune-meihua-facts.v1" },
+    "engineId": { "const": "meihua-yishu" },
+    "method": { "enum": ["time", "number", "manual"] },
+    "lines": { "$ref": "hexagram-facts.schema.json#/$defs/lineValues" },
+    "primary": { "$ref": "hexagram-facts.schema.json#/$defs/hexagramRef" },
+    "changed": { "$ref": "hexagram-facts.schema.json#/$defs/hexagramRef" },
+    "mutual": { "$ref": "hexagram-facts.schema.json#/$defs/hexagramRef" },
+    "movingLine": { "type": "integer", "minimum": 1, "maximum": 6 },
+    "movingLines": { "type": "array", "prefixItems": [{ "type": "integer", "minimum": 1, "maximum": 6 }], "minItems": 1, "maxItems": 1, "items": false },
+    "upperTrigram": { "$ref": "hexagram-facts.schema.json#/$defs/trigramRef" },
+    "lowerTrigram": { "$ref": "hexagram-facts.schema.json#/$defs/trigramRef" },
+    "body": { "enum": ["upper", "lower"] },
+    "use": { "enum": ["upper", "lower"] },
+    "fiveElements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["upper", "lower", "body", "use", "relation"],
+      "properties": {
+        "upper": { "enum": ["木", "火", "土", "金", "水"] },
+        "lower": { "enum": ["木", "火", "土", "金", "水"] },
+        "body": { "enum": ["木", "火", "土", "金", "水"] },
+        "use": { "enum": ["木", "火", "土", "金", "水"] },
+        "relation": { "enum": ["同体", "体生用", "用生体", "体克用", "用克体"] }
+      }
+    },
+    "sourceNumbers": { "type": "object" },
+    "calendar": { "$ref": "reading-record-v2.schema.json#/$defs/calendarContext" },
+    "readingPolicy": { "const": "meihua-body-use-v1" },
+    "ruleProfile": { "const": "meihua-yishu-v1" },
+    "engineVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$" }
+  }
+}

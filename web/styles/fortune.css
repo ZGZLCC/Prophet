@@ -1,0 +1,817 @@
+/* Fortune workspace layout and result states. Shared visual tokens live in base.css. */
+.fortune-layout {
+  display: grid;
+  grid-template-columns: minmax(360px, 0.86fr) minmax(0, 1.14fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.page-intro-actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex: 0 0 auto;
+}
+
+.fortune-input-card,
+.fortune-result-card,
+.fortune-review-create,
+.fortune-profile-form,
+.fortune-profile-heading,
+.fortune-history-heading,
+.fortune-knowledge-search,
+.fortune-rules-card,
+.fortune-db-status,
+.fortune-db-import {
+  padding: 18px;
+}
+
+.fortune-input-stack {
+  position: sticky;
+  top: 16px;
+  display: grid;
+  gap: 16px;
+}
+
+.fortune-input-card {
+  border-top: 3px solid var(--violet);
+}
+
+.fortune-input-heading,
+.fortune-result-header,
+.fortune-profile-card-head,
+.fortune-history-card-head,
+.claim-head,
+.fortune-result-actions,
+.fortune-tabs,
+.fortune-fact-tags,
+.fortune-secondary .section-heading,
+.fortune-db-status .section-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.fortune-input-heading h2,
+.fortune-result-header h2,
+.fortune-secondary h2,
+.fortune-secondary h3 {
+  margin: 3px 0 0;
+  color: var(--ink);
+  font-weight: 600;
+  letter-spacing: -0.24px;
+}
+
+.fortune-input-heading p,
+.fortune-result-header p,
+.fortune-secondary .section-heading p {
+  margin: 5px 0 0;
+  color: var(--body-mid);
+  font-size: 14px;
+  line-height: 22.4px;
+}
+
+.fortune-method-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+  margin: 16px 0 0;
+}
+
+#fortune-form {
+  display: grid;
+  gap: 13px;
+  margin-top: 16px;
+}
+
+.fortune-method-card {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  min-height: 52px;
+  padding: 9px 12px;
+  color: var(--body-mid);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--canvas);
+  text-align: left;
+  transition: border-color var(--motion) var(--ease), background-color var(--motion) var(--ease), transform var(--motion) var(--ease);
+}
+
+.fortune-method-card:hover {
+  border-color: var(--ink);
+  background: var(--action-bg);
+  transform: none;
+}
+
+.fortune-method-card.is-active {
+  color: var(--ink);
+  border-color: var(--ink);
+  background: var(--active-bg);
+  box-shadow: inset 3px 0 0 var(--violet);
+}
+
+.fortune-method-glyph {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 auto;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--canvas);
+  font-family: var(--font-sans);
+  font-size: 16px;
+}
+
+.fortune-method-card strong,
+.fortune-method-card small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fortune-method-card strong {
+  font-size: 14px;
+  font-weight: 550;
+}
+
+.fortune-method-card small {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.fortune-method-meihua-yishu.is-active { box-shadow: inset 3px 0 0 var(--orange); }
+.fortune-method-liuyao-najia.is-active { box-shadow: inset 3px 0 0 var(--blue); }
+.fortune-method-bazi-ziping.is-active { box-shadow: inset 3px 0 0 var(--green); }
+.fortune-method-ziwei.is-active { box-shadow: inset 3px 0 0 var(--violet); }
+.fortune-method-qimen.is-active { box-shadow: inset 3px 0 0 var(--pink); }
+.fortune-method-liuren.is-active { box-shadow: inset 3px 0 0 var(--blue-deep); }
+
+.fortune-dynamic-fields {
+  display: grid;
+  gap: 11px;
+}
+
+.fortune-dynamic-fields .mode-switch {
+  margin-bottom: 0;
+}
+
+#fortune-form > .form-actions {
+  margin-top: 1px;
+}
+
+.fortune-line-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.meihua-manual-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.fortune-line-grid .field span {
+  font-size: 12px;
+}
+
+.fortune-boundary,
+.result-boundary {
+  display: grid;
+  gap: 3px;
+  margin-top: 15px;
+  padding: 10px 11px;
+  color: var(--body-mid);
+  border: 1px solid var(--line);
+  border-left: 2px solid var(--yellow);
+  border-radius: var(--radius-sm);
+  background: var(--canvas);
+  font-size: 12.8px;
+  line-height: 20px;
+}
+
+.fortune-boundary strong,
+.result-boundary strong {
+  color: var(--body);
+  font-size: 12px;
+  font-weight: 550;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.fortune-result-column {
+  min-width: 0;
+}
+
+.fortune-result-card {
+  display: grid;
+  gap: 16px;
+  min-height: 430px;
+  border-top: 3px solid var(--yellow);
+}
+
+.fortune-result-header {
+  align-items: flex-start;
+  padding-bottom: 13px;
+  border-bottom: 1px solid var(--line);
+}
+
+.fortune-result-header h2 {
+  font-size: 32px;
+  font-weight: 600;
+}
+
+.fortune-result-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+}
+
+.fortune-result-actions .button {
+  width: 100%;
+  justify-content: center;
+}
+
+.fortune-result-export {
+  gap: 8px;
+}
+
+.fortune-result-empty {
+  display: grid;
+  align-content: center;
+  min-height: 380px;
+  max-width: 380px;
+  margin: auto;
+  text-align: center;
+}
+
+.fortune-result-empty h2,
+.fortune-result-empty h3 {
+  margin: 10px 0 6px;
+  letter-spacing: -0.04em;
+}
+
+.fortune-result-empty p {
+  margin: 0;
+  color: var(--body-mid);
+  font-size: 16px;
+  line-height: 25.6px;
+}
+
+.fortune-facts {
+  display: grid;
+  gap: 14px;
+}
+
+.fortune-metric-grid,
+.db-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.fortune-metric,
+.db-stat-grid div {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  padding: 11px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--paper);
+}
+
+.fortune-metric span,
+.db-stat-grid span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.fortune-metric strong,
+.db-stat-grid strong {
+  overflow: hidden;
+  color: var(--ink);
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.24px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fortune-fact-tags {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.fortune-table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+}
+
+.fortune-table {
+  width: 100%;
+  min-width: 550px;
+  border-collapse: collapse;
+  color: var(--body-mid);
+  font-size: 14px;
+}
+
+.fortune-table th,
+.fortune-table td {
+  padding: 8px 9px;
+  border-bottom: 1px solid var(--hairline);
+  text-align: left;
+  vertical-align: top;
+}
+
+.fortune-table th {
+  color: var(--body);
+  background: var(--action-bg);
+  font-size: 12.8px;
+  font-weight: 550;
+}
+
+.fortune-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.fortune-json,
+.fortune-prompt {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--paper);
+}
+
+.fortune-json summary,
+.fortune-prompt .section-heading {
+  padding: 10px 11px;
+  color: var(--body);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.fortune-json pre,
+.fortune-prompt pre {
+  max-height: 330px;
+  margin: 0;
+  overflow: auto;
+  padding: 11px;
+  color: var(--body);
+  border-top: 1px solid var(--hairline);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 16px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.qimen-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(3, minmax(82px, auto));
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--action-bg);
+}
+
+.qimen-cell {
+  display: grid;
+  align-content: start;
+  gap: 2px;
+  min-width: 0;
+  padding: 8px;
+  color: var(--body-mid);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--canvas);
+}
+
+.qimen-cell.is-center {
+  background: var(--canvas);
+  border-color: var(--yellow);
+}
+
+.qimen-cell.is-marked {
+  box-shadow: inset 0 2px 0 var(--yellow);
+}
+
+.qimen-cell > strong {
+  color: var(--ink);
+  font-size: 20px;
+  font-weight: 550;
+}
+
+.qimen-cell > div {
+  overflow: hidden;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.qimen-cell small,
+.qimen-palace {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.bazi-pillar-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.bazi-pillar {
+  display: grid;
+  gap: 4px;
+  padding: 11px 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--paper);
+  text-align: center;
+}
+
+.bazi-pillar span,
+.bazi-pillar small,
+.bazi-pillar em {
+  color: var(--muted);
+  font-size: 12px;
+  font-style: normal;
+}
+
+.bazi-pillar strong {
+  color: var(--green);
+  font-family: var(--font-sans);
+  font-size: 24px;
+  font-weight: 550;
+}
+
+.transmission-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.transmission-row span {
+  display: grid;
+  gap: 3px;
+  padding: 9px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--paper);
+  text-align: center;
+}
+
+.transmission-row small,
+.transmission-row em {
+  color: var(--muted);
+  font-size: 12px;
+  font-style: normal;
+}
+
+.transmission-row strong {
+  color: var(--blue-deep);
+  font-size: 24px;
+  font-weight: 550;
+}
+
+.fortune-interpretation {
+  padding: 13px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--paper);
+}
+
+.markdown-copy,
+.fortune-history-interpretation p {
+  margin: 0;
+  color: var(--body);
+  font-size: 16px;
+  line-height: 25.6px;
+}
+
+.fortune-tabs {
+  justify-content: flex-start;
+  gap: 0;
+  margin-top: 18px;
+  padding: 0;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--hairline);
+  border-radius: 0;
+  background: transparent;
+}
+
+.fortune-tab {
+  flex: 0 0 auto;
+  min-height: 44px;
+  padding: 0 16px;
+  color: var(--body-mid);
+  border-radius: 0;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.fortune-tab:hover,
+.fortune-tab.is-active {
+  color: var(--ink);
+  background: transparent;
+  box-shadow: inset 0 -2px 0 var(--ink);
+}
+
+.fortune-secondary {
+  margin-top: 12px;
+}
+
+.fortune-history-layout {
+  display: grid;
+  gap: 12px;
+}
+
+.fortune-history-heading > .section-heading {
+  margin: 3px 2px 0;
+}
+
+.fortune-history-card {
+  min-width: 0;
+  padding: 20px;
+}
+
+.fortune-history-card-head {
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.fortune-history-card-head > div:first-child {
+  min-width: 0;
+  flex: 1 1 220px;
+}
+
+.fortune-history-card h2 {
+  overflow: hidden;
+  max-width: 18ch;
+  margin: 3px 0 4px;
+  font-size: 32px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fortune-history-card p {
+  margin: 4px 0 0;
+  color: var(--body-mid);
+  font-size: 14px;
+  line-height: 22.4px;
+}
+
+.fortune-history-card .tag-row {
+  margin-top: 9px;
+}
+
+.fortune-history-card .card-actions {
+  max-width: 100%;
+  margin-left: auto;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.fortune-path-field {
+  margin-top: 18px;
+}
+
+.fortune-review-layout,
+.fortune-profiles-layout,
+.fortune-knowledge-layout,
+.fortune-data-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.fortune-profiles-layout {
+  grid-template-columns: 1fr;
+}
+
+.fortune-claims-list {
+  display: grid;
+  gap: 10px;
+}
+
+.fortune-claims-list > .section-heading,
+.fortune-profile-heading > .section-heading {
+  margin: 3px 2px 0;
+}
+
+.fortune-claim-card,
+.fortune-profile-card,
+.knowledge-result,
+.rule-hit-list article {
+  padding: 13px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--paper);
+}
+
+.claim-head h3 {
+  max-width: 410px;
+  margin-top: 4px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 25.6px;
+}
+
+.fortune-claim-card > p,
+.fortune-profile-card p,
+.knowledge-result p,
+.db-detail {
+  color: var(--body-mid);
+  font-size: 14px;
+  line-height: 22.4px;
+}
+
+.fortune-claim-card > p {
+  margin: 7px 0 10px;
+}
+
+.fortune-profile-card h2 {
+  overflow: hidden;
+  margin: 3px 0 4px;
+  font-size: 32px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fortune-profile-card {
+  padding: 20px;
+}
+
+.fortune-profile-card p { margin: 4px 0 0; }
+
+.fortune-profile-card .tag-row {
+  margin-top: 9px;
+}
+
+.fortune-profile-inline-form {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.card-actions {
+  display: flex;
+  gap: 9px;
+  flex: 0 0 auto;
+}
+
+.fortune-profile-heading .section-heading {
+  align-items: center;
+}
+
+.fortune-knowledge-layout,
+.fortune-data-layout {
+  grid-template-columns: 1fr;
+}
+
+.fortune-knowledge-search .input-with-action input {
+  width: auto;
+  flex: 1 1 auto;
+}
+
+.knowledge-results,
+.rule-hit-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.knowledge-result-head,
+.rule-hit-list article {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 9px;
+}
+
+.knowledge-result p { margin: 8px 0 5px; }
+.knowledge-result small { color: var(--muted); font-size: 12px; }
+
+.rule-hit-list article {
+  flex-wrap: wrap;
+  color: var(--body-mid);
+  font-size: 14px;
+}
+
+.rule-hit-list article strong { color: var(--body); font-family: var(--font-mono); font-size: 12px; }
+.rule-hit-list article small { color: var(--muted); font-size: 12px; }
+
+.db-stat-grid {
+  margin: 14px 0 8px;
+}
+
+.db-stat-grid strong {
+  color: var(--green);
+}
+
+.db-detail {
+  margin: 0 0 14px;
+}
+
+.fortune-data-layout .form-actions {
+  flex-wrap: wrap;
+}
+
+@media (max-width: 991px) {
+  .fortune-layout {
+    grid-template-columns: minmax(320px, 0.9fr) minmax(0, 1.1fr);
+  }
+
+  .fortune-review-layout,
+  .fortune-profiles-layout,
+  .fortune-knowledge-layout,
+  .fortune-data-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 767px) {
+  .fortune-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .fortune-input-stack {
+    position: static;
+  }
+}
+
+@media (max-width: 479px) {
+  .fortune-input-card,
+  .fortune-result-card,
+  .fortune-review-create,
+  .fortune-profile-form,
+  .fortune-profile-heading,
+  .fortune-profile-card,
+  .fortune-history-heading,
+  .fortune-history-card,
+  .fortune-knowledge-search,
+  .fortune-rules-card,
+  .fortune-db-status,
+  .fortune-db-import {
+    padding: 14px;
+  }
+
+  .fortune-method-grid,
+  .fortune-line-grid,
+  .bazi-pillar-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .fortune-metric-grid,
+  .db-stat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .qimen-grid {
+    gap: 4px;
+    padding: 4px;
+  }
+
+  .qimen-cell {
+    padding: 6px 4px;
+  }
+
+  .qimen-cell > div,
+  .qimen-cell small {
+    font-size: 8px;
+  }
+
+  .fortune-result-actions .button {
+    flex: 1 1 auto;
+  }
+
+  .fortune-result-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .claim-head,
+  .fortune-profile-card-head,
+  .fortune-history-card-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+
+  .card-actions {
+    align-self: flex-end;
+  }
+}

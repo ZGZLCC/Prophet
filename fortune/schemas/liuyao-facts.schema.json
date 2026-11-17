@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:fortune-telling:schema:liuyao-facts:1.0.0",
+  "title": "LiuyaoFacts",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "engineId", "method", "lines", "primary", "changed", "movingLines", "changedLines", "palace", "month", "day", "linesDetail", "hiddenLines", "useGodCandidates", "ruleHits", "calendar", "readingPolicy", "ruleProfile", "engineVersion"],
+  "properties": {
+    "schemaVersion": { "const": "fortune-liuyao-facts.v1" },
+    "engineId": { "const": "liuyao-najia" },
+    "method": { "enum": ["coins", "manual"] },
+    "lines": { "$ref": "hexagram-facts.schema.json#/$defs/lineValues" },
+    "coinTosses": { "type": "array", "minItems": 6, "maxItems": 6, "items": { "type": "array", "minItems": 3, "maxItems": 3, "items": { "enum": [0, 1] } } },
+    "primary": { "$ref": "hexagram-facts.schema.json#/$defs/hexagramRef" },
+    "changed": { "$ref": "hexagram-facts.schema.json#/$defs/hexagramRef" },
+    "movingLines": { "type": "array", "items": { "type": "integer", "minimum": 1, "maximum": 6 }, "uniqueItems": true },
+    "changedLines": { "type": "array", "minItems": 6, "maxItems": 6, "items": { "enum": [0, 1] } },
+    "palace": {
+      "type": "object", "additionalProperties": false,
+      "required": ["name", "element", "number", "rank", "position", "shiLine", "yingLine"],
+      "properties": { "name": { "type": "string" }, "element": { "$ref": "#/$defs/element" }, "number": { "type": "integer", "minimum": 1, "maximum": 64 }, "rank": { "type": "integer", "minimum": 0, "maximum": 7 }, "position": { "enum": ["本宫", "一世", "二世", "三世", "四世", "五世", "游魂", "归魂"] }, "shiLine": { "type": "integer", "minimum": 1, "maximum": 6 }, "yingLine": { "type": "integer", "minimum": 1, "maximum": 6 } }
+    },
+    "month": { "$ref": "#/$defs/ganzhi" },
+    "day": {
+      "type": "object", "additionalProperties": false,
+      "required": ["stem", "branch", "stemNumber", "branchNumber", "ganZhiIndex", "element", "xun", "xunStartBranch", "xunKong"],
+      "properties": { "stem": { "type": "string" }, "branch": { "type": "string" }, "stemNumber": { "type": "integer" }, "branchNumber": { "type": "integer" }, "ganZhiIndex": { "type": "integer", "minimum": 0, "maximum": 59 }, "element": { "$ref": "#/$defs/element" }, "xun": { "type": "string" }, "xunStartBranch": { "type": "string" }, "xunKong": { "type": "array", "prefixItems": [{ "type": "string" }, { "type": "string" }], "items": false, "minItems": 2, "maxItems": 2 } }
+    },
+    "linesDetail": { "type": "array", "minItems": 6, "maxItems": 6, "items": { "$ref": "#/$defs/lineFact" } },
+    "hiddenLines": { "type": "array", "items": { "$ref": "#/$defs/hiddenLine" } },
+    "useGodCandidates": { "type": "array", "items": { "$ref": "#/$defs/candidate" } },
+    "selectedUseGod": { "$ref": "#/$defs/candidate" },
+    "ruleHits": { "type": "array", "items": { "$ref": "#/$defs/ruleHit" } },
+    "calendar": { "$ref": "reading-record-v2.schema.json#/$defs/calendarContext" },
+    "readingPolicy": { "const": "liuyao-najia-analysis-v1" },
+    "ruleProfile": { "const": "liuyao-najia-v1" },
+    "engineVersion": { "type": "string" }
+  },
+  "$defs": {
+    "element": { "enum": ["木", "火", "土", "金", "水"] },
+    "ganzhi": {
+      "type": "object", "additionalProperties": false,
+      "required": ["stem", "branch", "stemNumber", "branchNumber", "element"],
+      "properties": { "stem": { "type": "string" }, "branch": { "type": "string" }, "stemNumber": { "type": "integer" }, "branchNumber": { "type": "integer" }, "element": { "$ref": "#/$defs/element" } }
+    },
+    "lineFact": {
+      "type": "object", "additionalProperties": false,
+      "required": ["line", "value", "polarity", "moving", "changedPolarity", "stem", "branch", "stemNumber", "branchNumber", "element", "relation", "spirit", "isShi", "isYing", "inXunKong", "monthRelation", "dayRelation", "seasonalStrength", "branchRelations"],
+      "properties": {
+        "line": { "type": "integer", "minimum": 1, "maximum": 6 }, "value": { "enum": [6, 7, 8, 9] }, "polarity": { "enum": ["阴", "阳"] }, "moving": { "type": "boolean" }, "changedPolarity": { "enum": ["阴", "阳"] }, "stem": { "type": "string" }, "branch": { "type": "string" }, "stemNumber": { "type": "integer" }, "branchNumber": { "type": "integer" }, "element": { "$ref": "#/$defs/element" }, "relation": { "enum": ["父母", "兄弟", "子孙", "妻财", "官鬼"] }, "spirit": { "enum": ["青龙", "朱雀", "勾陈", "螣蛇", "白虎", "玄武"] }, "isShi": { "type": "boolean" }, "isYing": { "type": "boolean" }, "inXunKong": { "type": "boolean" }, "monthRelation": { "enum": ["同", "生我", "我生", "我克", "克我"] }, "dayRelation": { "enum": ["同", "生我", "我生", "我克", "克我"] }, "seasonalStrength": { "enum": ["旺", "相", "休", "囚", "死"] }, "branchRelations": { "type": "object" }
+      }
+    },
+    "hiddenLine": {
+      "type": "object", "additionalProperties": false,
+      "required": ["line", "stem", "branch", "stemNumber", "branchNumber", "element", "relation", "flyLine", "flyBranch", "reasonRuleId"],
+      "properties": { "line": { "type": "integer" }, "stem": { "type": "string" }, "branch": { "type": "string" }, "stemNumber": { "type": "integer" }, "branchNumber": { "type": "integer" }, "element": { "$ref": "#/$defs/element" }, "relation": { "enum": ["父母", "兄弟", "子孙", "妻财", "官鬼"] }, "flyLine": { "type": "integer" }, "flyBranch": { "type": "string" }, "reasonRuleId": { "type": "string" } }
+    },
+    "candidate": {
+      "type": "object", "additionalProperties": false,
+      "required": ["line", "source", "relation", "strength", "moving", "isShi", "reasonRuleId", "reason"],
+      "properties": { "line": { "type": "integer" }, "source": { "enum": ["primary", "hidden"] }, "relation": { "enum": ["父母", "兄弟", "子孙", "妻财", "官鬼"] }, "strength": { "enum": ["旺", "相", "休", "囚", "死"] }, "moving": { "type": "boolean" }, "isShi": { "type": "boolean" }, "reasonRuleId": { "type": "string" }, "reason": { "type": "string" } }
+    },
+    "ruleHit": { "type": "object", "required": ["ruleId", "version", "category", "result", "details"], "properties": { "ruleId": { "type": "string" }, "version": { "type": "string" }, "category": { "type": "string" }, "result": { "type": "string" }, "details": { "type": "object" } } }
+  }
+}

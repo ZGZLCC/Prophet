@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:fortune-telling:schema:qimen-rule-passage:1.0.0",
+  "title": "QimenRulePassage",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "work", "edition", "tradition", "section", "textTraditional", "textSimplified", "sourcePage", "provenance", "checksum"],
+  "properties": {
+    "id": { "type": "string", "minLength": 1, "maxLength": 160 },
+    "work": { "const": "时家奇门规则摘录" },
+    "edition": { "type": "string", "minLength": 1, "maxLength": 300 },
+    "tradition": { "const": "qimen-shijia-zhuanpan-chaibu" },
+    "section": { "enum": ["school", "dun", "yuan", "ju", "earth-plate", "heavenly-plate", "stars", "gates", "spirits", "markers", "limitations"] },
+    "textTraditional": { "type": "string", "minLength": 1, "maxLength": 20000 },
+    "textSimplified": { "type": "string", "minLength": 1, "maxLength": 20000 },
+    "sourcePage": { "type": "string", "minLength": 1, "maxLength": 300 },
+    "provenance": { "const": "project-authored" },
+    "checksum": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+  }
+}

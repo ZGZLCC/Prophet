@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:fortune-telling:schema:meihua-rule-passage:1.0.0",
+  "title": "MeihuaRulePassage",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "work",
+    "edition",
+    "tradition",
+    "section",
+    "textTraditional",
+    "textSimplified",
+    "sourcePage",
+    "provenance",
+    "checksum"
+  ],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "work": { "const": "梅花易数" },
+    "edition": { "type": "string", "minLength": 1 },
+    "tradition": { "const": "meihua-yishu" },
+    "section": {
+      "type": "string",
+      "enum": ["method", "body-use", "mutual-change", "five-elements", "time-policy", "limitations"]
+    },
+    "textTraditional": { "type": "string", "minLength": 1 },
+    "textSimplified": { "type": "string", "minLength": 1 },
+    "sourcePage": { "type": "string", "minLength": 1 },
+    "provenance": { "const": "project-authored" },
+    "checksum": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+  }
+}

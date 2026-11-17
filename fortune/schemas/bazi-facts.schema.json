@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:fortune-telling:schema:bazi-facts:1.0.0",
+  "title": "BaziFacts",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "engineId", "birth", "time", "pillars", "dayMaster", "fiveElements", "tenGods", "relationships", "luck", "flowYears", "ruleHits", "readingPolicy", "ruleProfile", "engineVersion"],
+  "properties": {
+    "schemaVersion": { "const": "fortune-bazi-facts.v1" },
+    "engineId": { "const": "bazi-ziping" },
+    "birth": { "$ref": "#/$defs/birth" },
+    "time": { "type": "object", "required": ["civil", "effective", "calendar", "trueSolarTimeApplied", "solarCorrectionMinutes"], "properties": { "civil": { "type": "object" }, "effective": { "type": "object" }, "calendar": { "type": "object" }, "trueSolarTimeApplied": { "type": "boolean" }, "solarCorrectionMinutes": { "type": "number" } } },
+    "pillars": { "type": "object", "additionalProperties": false, "required": ["year", "month", "day", "hour"], "properties": { "year": { "$ref": "#/$defs/pillar" }, "month": { "$ref": "#/$defs/pillar" }, "day": { "$ref": "#/$defs/pillar" }, "hour": { "$ref": "#/$defs/pillar" } } },
+    "dayMaster": { "$ref": "#/$defs/stemFact" },
+    "fiveElements": { "$ref": "#/$defs/fiveElements" },
+    "tenGods": { "type": "object", "required": ["surface", "hidden", "distribution"], "properties": { "surface": { "type": "object" }, "hidden": { "type": "object" }, "distribution": { "type": "object" } } },
+    "relationships": { "type": "object", "required": ["heavenlyStemCombinations", "earthlyBranchRelations", "roots"], "properties": { "heavenlyStemCombinations": { "type": "array", "items": { "type": "object" } }, "earthlyBranchRelations": { "type": "array", "items": { "type": "object" } }, "roots": { "type": "object" } } },
+    "luck": { "$ref": "#/$defs/luck" },
+    "flowYears": { "type": "array", "items": { "type": "object" } },
+    "ruleHits": { "type": "array", "items": { "$ref": "#/$defs/ruleHit" } },
+    "readingPolicy": { "const": "bazi-ziping-analysis-v1" },
+    "ruleProfile": { "const": "bazi-ziping-v1" },
+    "engineVersion": { "const": "0.5.0" }
+  },
+  "$defs": {
+    "element": { "enum": ["木", "火", "土", "金", "水"] },
+    "stem": { "type": "string", "enum": ["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"] },
+    "branch": { "type": "string", "enum": ["子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"] },
+    "ganzhi": { "type": "object", "required": ["index", "stemNumber", "stem", "branchNumber", "branch"], "properties": { "index": { "type": "integer", "minimum": 0, "maximum": 59 }, "stemNumber": { "type": "integer", "minimum": 1, "maximum": 10 }, "stem": { "$ref": "#/$defs/stem" }, "branchNumber": { "type": "integer", "minimum": 1, "maximum": 12 }, "branch": { "$ref": "#/$defs/branch" } } },
+    "stemFact": { "type": "object", "required": ["stem", "stemNumber", "element", "polarity"], "properties": { "stem": { "$ref": "#/$defs/stem" }, "stemNumber": { "type": "integer" }, "element": { "$ref": "#/$defs/element" }, "polarity": { "enum": ["阳", "阴"] }, "tenGod": { "type": "string" } } },
+    "hiddenStem": { "allOf": [{ "$ref": "#/$defs/stemFact" }, { "type": "object", "required": ["proportion", "source"], "properties": { "proportion": { "type": "number" }, "source": { "type": "string" } } }] },
+    "pillar": { "type": "object", "required": ["key", "label", "ganZhi", "naYin", "stem", "branch"], "properties": { "key": { "enum": ["year", "month", "day", "hour"] }, "label": { "type": "string" }, "ganZhi": { "$ref": "#/$defs/ganzhi" }, "naYin": { "type": "string" }, "stem": { "$ref": "#/$defs/stemFact" }, "branch": { "type": "object", "required": ["branch", "branchNumber", "element", "hiddenStems", "twelveGrowth"], "properties": { "branch": { "$ref": "#/$defs/branch" }, "branchNumber": { "type": "integer" }, "element": { "$ref": "#/$defs/element" }, "hiddenStems": { "type": "array", "items": { "$ref": "#/$defs/hiddenStem" } }, "twelveGrowth": { "type": "string" } } } } },
+    "counts": { "type": "object", "required": ["木", "火", "土", "金", "水"], "properties": { "木": { "type": "number" }, "火": { "type": "number" }, "土": { "type": "number" }, "金": { "type": "number" }, "水": { "type": "number" } } },
+    "fiveElements": { "type": "object", "required": ["surfaceCounts", "hiddenCounts", "combinedCounts", "monthElement", "seasonalStrength"], "properties": { "surfaceCounts": { "$ref": "#/$defs/counts" }, "hiddenCounts": { "$ref": "#/$defs/counts" }, "combinedCounts": { "$ref": "#/$defs/counts" }, "monthElement": { "$ref": "#/$defs/element" }, "seasonalStrength": { "type": "object" } } },
+    "birth": { "type": "object", "required": ["gender", "calendarType", "originalBirthAt", "normalizedBirthAt", "timezone", "useTrueSolarTime", "luckDirection", "resolvedLuckDirection", "startLuckMethod"], "properties": { "profileId": { "type": "string" }, "displayName": { "type": "string" }, "gender": { "enum": ["male", "female", "unspecified"] }, "calendarType": { "enum": ["gregorian", "lunisolar"] }, "originalBirthAt": { "type": "string" }, "normalizedBirthAt": { "type": "string" }, "timezone": { "type": "string" }, "location": { "type": "object" }, "useTrueSolarTime": { "type": "boolean" }, "luckDirection": { "type": "string" }, "resolvedLuckDirection": { "enum": ["forward", "backward"] }, "startLuckMethod": { "const": "days-divided-by-three" } } },
+    "luck": { "type": "object", "required": ["direction", "directionReason", "referenceSolarTerm", "startAge", "startAt", "cycles"], "properties": { "direction": { "enum": ["forward", "backward"] }, "directionReason": { "type": "string" }, "referenceSolarTerm": { "type": "object" }, "startAge": { "type": "object" }, "startAt": { "type": "string" }, "cycles": { "type": "array", "items": { "type": "object" } } } },
+    "ruleHit": { "type": "object", "required": ["ruleId", "version", "category", "result", "details"], "properties": { "ruleId": { "type": "string" }, "version": { "type": "string" }, "category": { "type": "string" }, "result": { "type": "string" }, "details": { "type": "object" } } }
+  }
+}

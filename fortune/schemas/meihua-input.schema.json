@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:fortune-telling:schema:meihua-input:1.0.0",
+  "title": "MeihuaInput",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["question", "category", "method", "castAt", "timezone"],
+  "properties": {
+    "question": { "type": "string", "minLength": 1, "maxLength": 1000 },
+    "category": { "type": "string", "enum": ["career", "relationship", "finance", "travel", "lost-item", "other"] },
+    "method": { "enum": ["time", "number", "manual"] },
+    "castAt": { "type": "string", "format": "date-time" },
+    "timezone": { "type": "string", "minLength": 1, "maxLength": 100 },
+    "timePolicyId": { "type": "string", "enum": ["civil-standard-time-v1", "traditional-zi-chu-li-chun-v1", "traditional-zi-zheng-li-chun-v1"] },
+    "upperNumber": { "type": "integer", "minimum": 0, "maximum": 1000000000 },
+    "lowerNumber": { "type": "integer", "minimum": 0, "maximum": 1000000000 },
+    "upperTrigram": { "type": "integer", "minimum": 1, "maximum": 8 },
+    "lowerTrigram": { "type": "integer", "minimum": 1, "maximum": 8 },
+    "movingLine": { "type": "integer", "minimum": 1, "maximum": 6 }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "method": { "const": "time" } } },
+      "then": { "not": { "anyOf": [{ "required": ["upperNumber"] }, { "required": ["lowerNumber"] }, { "required": ["upperTrigram"] }, { "required": ["lowerTrigram"] }, { "required": ["movingLine"] }] } }
+    },
+    {
+      "if": { "properties": { "method": { "const": "number" } } },
+      "then": { "required": ["upperNumber", "lowerNumber"], "not": { "anyOf": [{ "required": ["upperTrigram"] }, { "required": ["lowerTrigram"] }, { "required": ["movingLine"] }] } }
+    },
+    {
+      "if": { "properties": { "method": { "const": "manual" } } },
+      "then": { "required": ["upperTrigram", "lowerTrigram", "movingLine"], "not": { "anyOf": [{ "required": ["upperNumber"] }, { "required": ["lowerNumber"] }] } }
+    }
+  ]
+}

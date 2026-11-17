@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:fortune-telling:schema:person-profile:1.0.0",
+  "title": "PersonProfileV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "id", "displayName", "gender", "calendarType", "birthAt", "timezone", "useTrueSolarTime", "timePolicyId", "luckDirection", "startLuckMethod", "createdAt", "updatedAt"],
+  "properties": {
+    "schemaVersion": { "const": "fortune-person-profile.v1" },
+    "id": { "type": "string", "format": "uuid" },
+    "displayName": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "gender": { "enum": ["male", "female", "unspecified"] },
+    "calendarType": { "enum": ["gregorian", "lunisolar"] },
+    "birthAt": { "type": "string", "format": "date-time" },
+    "lunarDate": { "$ref": "#/$defs/lunarDate" },
+    "timezone": { "type": "string", "minLength": 1, "maxLength": 100 },
+    "location": { "$ref": "#/$defs/location" },
+    "useTrueSolarTime": { "type": "boolean" },
+    "timePolicyId": { "type": "string", "enum": ["civil-standard-time-v1", "traditional-zi-chu-li-chun-v1", "traditional-zi-zheng-li-chun-v1"] },
+    "luckDirection": { "enum": ["auto-gender-year-stem", "forward", "backward"] },
+    "startLuckMethod": { "const": "days-divided-by-three" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "lunarDate": {
+      "type": "object", "additionalProperties": false,
+      "required": ["year", "month", "day", "isLeapMonth"],
+      "properties": { "year": { "type": "integer", "minimum": 1900, "maximum": 2100 }, "month": { "type": "integer", "minimum": 1, "maximum": 12 }, "day": { "type": "integer", "minimum": 1, "maximum": 30 }, "isLeapMonth": { "type": "boolean" } }
+    },
+    "location": {
+      "type": "object", "additionalProperties": false,
+      "required": ["latitude", "longitude"],
+      "properties": { "name": { "type": "string", "maxLength": 200 }, "latitude": { "type": "number", "minimum": -90, "maximum": 90 }, "longitude": { "type": "number", "minimum": -180, "maximum": 180 } }
+    }
+  }
+}

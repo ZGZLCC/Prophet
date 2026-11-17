@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:fortune-telling:schema:cast-input:1.0.0",
+  "title": "CastInput",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["question", "category", "method"],
+  "properties": {
+    "question": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000,
+      "description": "Trimmed user question; the service accepts at most 1000 characters."
+    },
+    "category": {
+      "type": "string",
+      "enum": ["career", "relationship", "finance", "travel", "lost-item", "other"]
+    },
+    "method": {
+      "type": "string",
+      "enum": ["coins", "manual"]
+    },
+    "lines": {
+      "type": "array",
+      "prefixItems": [
+        { "$ref": "#/$defs/lineValue" },
+        { "$ref": "#/$defs/lineValue" },
+        { "$ref": "#/$defs/lineValue" },
+        { "$ref": "#/$defs/lineValue" },
+        { "$ref": "#/$defs/lineValue" },
+        { "$ref": "#/$defs/lineValue" }
+      ],
+      "minItems": 6,
+      "maxItems": 6,
+      "items": false,
+      "description": "Initial to top line; required only for manual method."
+    },
+    "coinTosses": {
+      "type": "array",
+      "prefixItems": [
+        { "$ref": "#/$defs/coinToss" },
+        { "$ref": "#/$defs/coinToss" },
+        { "$ref": "#/$defs/coinToss" },
+        { "$ref": "#/$defs/coinToss" },
+        { "$ref": "#/$defs/coinToss" },
+        { "$ref": "#/$defs/coinToss" }
+      ],
+      "minItems": 6,
+      "maxItems": 6,
+      "items": false,
+      "description": "Optional deterministic replay extension; accepted only for the coins method."
+    },
+    "castAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Optional RFC 3339 timestamp; the service generates it when omitted."
+    },
+    "timezone": {
+      "const": "Asia/Shanghai",
+      "description": "Optional request field; defaults to Asia/Shanghai."
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "method": { "const": "manual" } } },
+      "then": { "required": ["lines"] }
+    },
+    {
+      "if": { "properties": { "method": { "const": "coins" } } },
+      "then": { "not": { "required": ["lines"] } }
+    },
+    {
+      "if": { "properties": { "method": { "const": "manual" } } },
+      "then": { "not": { "required": ["coinTosses"] } }
+    }
+  ],
+  "$defs": {
+    "lineValue": {
+      "type": "integer",
+      "enum": [6, 7, 8, 9]
+    },
+    "binaryLine": {
+      "type": "integer",
+      "enum": [0, 1]
+    },
+    "coinToss": {
+      "type": "array",
+      "prefixItems": [
+        { "$ref": "#/$defs/binaryLine" },
+        { "$ref": "#/$defs/binaryLine" },
+        { "$ref": "#/$defs/binaryLine" }
+      ],
+      "minItems": 3,
+      "maxItems": 3,
+      "items": false
+    }
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "manifestVersion": "1.0.0",
+  "projectTradition": "zhouyi-textual",
+  "ruleProfile": "zhouyi-jingyi-v1",
+  "createdAt": "2026-08-22",
+  "selectedBaseEditionId": "zhouyi-sibu-congkan",
+  "selectedElectronicSourceId": "wikisource-zhouyi-sibu-congkan",
+  "corpusScope": [
+    "hexagram-name",
+    "judgement",
+    "tuan",
+    "great-image",
+    "line",
+    "line-image"
+  ],
+  "sources": [
+    {
+      "id": "zhouyi-sibu-congkan",
+      "role": "base-edition",
+      "title": "周易（四部叢刊本）",
+      "work": "周易",
+      "edition": "四部叢刊本；景上海涵芬樓藏宋刊本",
+      "tradition": "zhouyi-textual",
+      "sourceUrl": "https://zh.wikisource.org/zh/%E5%91%A8%E6%98%93_%28%E5%9B%9B%E9%83%A8%E5%8F%A2%E5%88%8A%E6%9C%AC%29",
+      "fixedRevisionUrl": "https://zh.wikisource.org/w/index.php?title=%E5%91%A8%E6%98%93_%28%E5%9B%9B%E9%83%A8%E5%8F%A2%E5%88%8A%E6%9C%AC%29&oldid=1398182",
+      "revisionId": "1398182",
+      "checkedAt": "2026-08-22",
+      "usage": "source-of-record",
+      "rights": {
+        "originalWork": "public-domain",
+        "transcription": "CC-BY-SA-4.0",
+        "attributionRequired": true,
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "notice": "原作页面标示为公有领域；本地若采用维基文库录文，保留维基文库署名与相同方式共享要求。"
+      },
+      "notes": "只整理第一版所需的卦名、卦辞、彖传、大象、爻辞和小象；不复制现代白话译注。"
+    },
+    {
+      "id": "wikisource-zhouyi-sibu-congkan",
+      "role": "electronic-transcription",
+      "title": "维基文库《周易（四部叢刊本）》录文",
+      "work": "周易",
+      "edition": "四部叢刊本；六个固定分卷修订版",
+      "tradition": "zhouyi-textual",
+      "sourceUrl": "https://zh.wikisource.org/w/index.php?title=%E5%91%A8%E6%98%93_%28%E5%9B%9B%E9%83%A8%E5%8F%A2%E5%88%8A%E6%9C%AC%29&oldid=1398182",
+      "fixedRevisionUrl": "https://zh.wikisource.org/w/index.php?title=%E5%91%A8%E6%98%93_%28%E5%9B%9B%E9%83%A8%E5%8F%A2%E5%88%8A%E6%9C%AC%29&oldid=1398182",
+      "revisionId": "2652448,2652373,2652374,2652375,2652376,2652377",
+      "volumeRevisions": [
+        {
+          "volume": 1,
+          "title": "周易 (四部叢刊本)/卷一",
+          "revisionId": "2652448",
+          "fixedRevisionUrl": "https://zh.wikisource.org/w/index.php?title=%E5%91%A8%E6%98%93+%28%E5%9B%9B%E9%83%A8%E5%8F%A2%E5%88%8A%E6%9C%AC%29%2F%E5%8D%B7%E4%B8%80&oldid=2652448"
+        },
+        {
+          "volume": 2,
+          "title": "周易 (四部叢刊本)/卷二",
+          "revisionId": "2652373",
+          "fixedRevisionUrl": "https://zh.wikisource.org/w/index.php?title=%E5%91%A8%E6%98%93+%28%E5%9B%9B%E9%83%A8%E5%8F%A2%E5%88%8A%E6%9C%AC%29%2F%E5%8D%B7%E4%BA%8C&oldid=2652373"
+        },
+        {
+          "volume": 3,
+          "title": "周易 (四部叢刊本)/卷三",
+          "revisionId": "2652374",
+          "fixedRevisionUrl": "https://zh.wikisource.org/w/index.php?title=%E5%91%A8%E6%98%93+%28%E5%9B%9B%E9%83%A8%E5%8F%A2%E5%88%8A%E6%9C%AC%29%2F%E5%8D%B7%E4%B8%89&oldid=2652374"
+        },
+        {
+          "volume": 4,
+          "title": "周易 (四部叢刊本)/卷四",
+          "revisionId": "2652375",
+          "fixedRevisionUrl": "https://zh.wikisource.org/w/index.php?title=%E5%91%A8%E6%98%93+%28%E5%9B%9B%E9%83%A8%E5%8F%A2%E5%88%8A%E6%9C%AC%29%2F%E5%8D%B7%E5%9B%9B&oldid=2652375"
+        },
+        {
+          "volume": 5,
+          "title": "周易 (四部叢刊本)/卷五",
+          "revisionId": "2652376",
+          "fixedRevisionUrl": "https://zh.wikisource.org/w/index.php?title=%E5%91%A8%E6%98%93+%28%E5%9B%9B%E9%83%A8%E5%8F%A2%E5%88%8A%E6%9C%AC%29%2F%E5%8D%B7%E4%BA%94&oldid=2652376"
+        },
+        {
+          "volume": 6,
+          "title": "周易 (四部叢刊本)/卷六",
+          "revisionId": "2652377",
+          "fixedRevisionUrl": "https://zh.wikisource.org/w/index.php?title=%E5%91%A8%E6%98%93+%28%E5%9B%9B%E9%83%A8%E5%8F%A2%E5%88%8A%E6%9C%AC%29%2F%E5%8D%B7%E5%85%AD&oldid=2652377"
+        }
+      ],
+      "checkedAt": "2026-08-22",
+      "usage": "source-of-record",
+      "rights": {
+        "originalWork": "public-domain",
+        "transcription": "CC-BY-SA-4.0",
+        "attributionRequired": true,
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "notice": "录文使用前须保留来源链接、固定修订版和必要署名；影印本与录文逐条核对后才可标记 double-checked。"
+      },
+      "notes": "这是第一版本地 JSONL 语料的直接电子来源。固定修订版用于避免页面后续编辑造成来源漂移。"
+    },
+    {
+      "id": "ctext-zhouyi-cross-check",
+      "role": "cross-check",
+      "title": "中国哲学书电子化计划《周易》",
+      "work": "周易",
+      "edition": "电子图书馆页面标示的《武英殿十三经注疏》本《周易正义》及其版本导航",
+      "tradition": "zhouyi-textual",
+      "sourceUrl": "https://ctext.org/book-of-changes/zh",
+      "checkedAt": "2026-08-22",
+      "usage": "verification-only",
+      "rights": {
+        "originalWork": "public-domain-original",
+        "transcription": "rights-review-required",
+        "attributionRequired": true,
+        "notice": "只作版本和字词交叉核对，不自动批量下载、不把该站文本直接打包进本地语料；如需再发布，先核对其当前条款。"
+      },
+      "notes": "该页面不是本项目首选底本；它用于发现异文并记录核对线索，冲突必须回到影印本裁决。"
+    }
+  ],
+  "ingestionPolicy": {
+    "sourceOfRecord": "wikisource-zhouyi-sibu-congkan",
+    "crossCheckRequired": true,
+    "minimumReviewStatusForRuntime": "double-checked",
+    "allowModernTranslations": false,
+    "allowUnlicensedCommentary": false,
+    "preserveTraditionalText": true,
+    "checksumAlgorithm": "sha256",
+    "normalization": "字符串先做 Unicode NFC，换行统一为 LF，去除展示层 HTML；保留内部标点和空白，不静默改写异体字。checksum 对去掉 checksum 字段后的 SourcePassage 使用 RFC 8785 JCS 规范化后计算 SHA-256。"
+  }
+}

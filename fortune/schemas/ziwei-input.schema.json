@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:fortune-telling:schema:ziwei-input:1.0.0",
+  "title": "ZiweiInput",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["question", "category", "gender", "calendarType", "birthAt", "timezone", "timePolicyId", "fixLeap", "flowYearCount"],
+  "properties": {
+    "question": { "type": "string", "minLength": 1, "maxLength": 1000 },
+    "category": { "type": "string", "enum": ["career", "relationship", "finance", "travel", "lost-item", "other"] },
+    "profileId": { "type": "string", "minLength": 1, "maxLength": 120 },
+    "displayName": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "gender": { "enum": ["male", "female", "unspecified"] },
+    "calendarType": { "enum": ["gregorian", "lunisolar"] },
+    "birthAt": { "type": "string", "format": "date-time" },
+    "originalBirthAt": { "type": "string", "format": "date-time" },
+    "lunarDate": { "$ref": "#/$defs/lunarDate" },
+    "timezone": { "type": "string", "minLength": 1, "maxLength": 100 },
+    "timePolicyId": { "type": "string", "enum": ["civil-standard-time-v1", "traditional-zi-chu-li-chun-v1", "traditional-zi-zheng-li-chun-v1"] },
+    "fixLeap": { "type": "boolean" },
+    "flowYearStart": { "type": "integer", "minimum": 1900, "maximum": 2100 },
+    "flowYearCount": { "type": "integer", "minimum": 1, "maximum": 12 }
+  },
+  "$defs": {
+    "lunarDate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["year", "month", "day", "isLeapMonth"],
+      "properties": {
+        "year": { "type": "integer", "minimum": 1900, "maximum": 2100 },
+        "month": { "type": "integer", "minimum": 1, "maximum": 12 },
+        "day": { "type": "integer", "minimum": 1, "maximum": 30 },
+        "isLeapMonth": { "type": "boolean" }
+      }
+    }
+  }
+}

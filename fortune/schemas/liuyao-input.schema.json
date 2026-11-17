@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:fortune-telling:schema:liuyao-input:1.0.0",
+  "title": "LiuyaoInput",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["question", "category", "method", "castAt", "timezone", "timePolicyId"],
+  "properties": {
+    "question": { "type": "string", "minLength": 1, "maxLength": 1000 },
+    "category": { "type": "string", "enum": ["career", "relationship", "finance", "travel", "lost-item", "other"] },
+    "method": { "enum": ["coins", "manual"] },
+    "lines": { "type": "array", "prefixItems": [{ "enum": [6, 7, 8, 9] }, { "enum": [6, 7, 8, 9] }, { "enum": [6, 7, 8, 9] }, { "enum": [6, 7, 8, 9] }, { "enum": [6, 7, 8, 9] }, { "enum": [6, 7, 8, 9] }], "items": false, "minItems": 6, "maxItems": 6 },
+    "coinTosses": { "type": "array", "minItems": 6, "maxItems": 6, "items": { "type": "array", "minItems": 3, "maxItems": 3, "items": { "enum": [0, 1] } } },
+    "castAt": { "type": "string", "format": "date-time" },
+    "timezone": { "type": "string", "minLength": 1, "maxLength": 100 },
+    "timePolicyId": { "type": "string", "enum": ["civil-standard-time-v1", "traditional-zi-chu-li-chun-v1", "traditional-zi-zheng-li-chun-v1"] },
+    "useGodLine": { "type": "integer", "minimum": 1, "maximum": 6 }
+  }
+}

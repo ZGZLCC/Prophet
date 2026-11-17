@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:fortune-telling:schema:qimen-facts:1.0.0",
+  "title": "QimenFacts",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "engineId", "time", "setup", "xun", "value", "palaces", "derivation", "ruleHits", "readingPolicy", "ruleProfile", "engineVersion"],
+  "properties": {
+    "schemaVersion": { "const": "fortune-qimen-facts.v1" },
+    "engineId": { "const": "qimen" },
+    "time": { "$ref": "#/$defs/time" },
+    "setup": { "$ref": "#/$defs/setup" },
+    "xun": { "type": "object", "required": ["head", "hiddenStem", "xun", "voidBranches", "voidPalaces"], "properties": { "head": { "type": "object" }, "hiddenStem": { "type": "string" }, "xun": { "type": "string" }, "voidBranches": { "type": "array", "minItems": 2, "maxItems": 2 }, "voidPalaces": { "type": "array", "minItems": 2, "maxItems": 2 } } },
+    "value": { "type": "object", "required": ["valueStar", "valueStarStartPalace", "valueStarPalace", "valueGate", "valueGateStartPalace", "valueGatePalace", "hourStem", "hourStemForPlacement", "hourStemPalace", "hourBranch", "hourBranchPalace", "horseBranch", "horsePalace"], "properties": { "valueStar": { "type": "string" }, "valueStarStartPalace": { "type": "integer", "minimum": 1, "maximum": 9 }, "valueStarPalace": { "type": "integer", "minimum": 1, "maximum": 9 }, "valueGate": { "type": "string" }, "valueGateStartPalace": { "type": "integer", "minimum": 1, "maximum": 9 }, "valueGatePalace": { "type": "integer", "minimum": 1, "maximum": 9 }, "hourStem": { "type": "string" }, "hourStemForPlacement": { "type": "string" }, "hourStemPalace": { "type": "integer", "minimum": 1, "maximum": 9 }, "hourBranch": { "type": "string" }, "hourBranchPalace": { "type": "integer", "minimum": 1, "maximum": 9 }, "horseBranch": { "type": "string" }, "horsePalace": { "type": "integer", "minimum": 1, "maximum": 9 } } },
+    "palaces": { "type": "array", "minItems": 9, "maxItems": 9, "items": { "$ref": "#/$defs/palace" } },
+    "derivation": { "type": "array", "minItems": 10, "items": { "type": "object", "required": ["step", "id", "title", "ruleIds", "inputs", "output"], "properties": { "step": { "type": "integer", "minimum": 1 }, "id": { "type": "string" }, "title": { "type": "string" }, "ruleIds": { "type": "array", "items": { "type": "string" } }, "inputs": { "type": "object" }, "output": { "type": "object" } } } },
+    "ruleHits": { "type": "array", "items": { "type": "object" } },
+    "readingPolicy": { "const": "qimen-shijia-analysis-v1" },
+    "ruleProfile": { "const": "qimen-shijia-zhuanpan-chaibu-v1" },
+    "engineVersion": { "const": "0.8.0" }
+  },
+  "$defs": {
+    "time": { "type": "object", "required": ["civil", "calendar", "hour", "day"], "properties": { "civil": { "type": "object" }, "calendar": { "type": "object" }, "hour": { "type": "object" }, "day": { "type": "object" } } },
+    "setup": { "type": "object", "required": ["solarTerm", "dun", "yuan", "yuanStart", "juNumber", "juLabel", "method"], "properties": { "solarTerm": { "type": "object" }, "dun": { "enum": ["阳遁", "阴遁"] }, "yuan": { "enum": ["上元", "中元", "下元"] }, "yuanStart": { "type": "object" }, "juNumber": { "type": "integer", "minimum": 1, "maximum": 9 }, "juLabel": { "type": "string" }, "method": { "const": "拆补" } } },
+    "palace": { "type": "object", "required": ["palace", "row", "column", "isCenter", "earthStem", "heavenlyStem", "star", "isValueStar", "isValueGate", "isVoid", "isHorse", "source"], "properties": { "palace": { "type": "integer", "minimum": 1, "maximum": 9 }, "row": { "type": "integer", "minimum": 1, "maximum": 3 }, "column": { "type": "integer", "minimum": 1, "maximum": 3 }, "isCenter": { "type": "boolean" }, "earthStem": { "type": "string" }, "heavenlyStem": { "type": "string" }, "star": { "type": "string" }, "gate": { "type": "string" }, "spirit": { "type": "string" }, "isValueStar": { "type": "boolean" }, "isValueGate": { "type": "boolean" }, "isVoid": { "type": "boolean" }, "isHorse": { "type": "boolean" }, "source": { "type": "object" } } }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:fortune-telling:schema:liuren-rule-passage:1.0.0",
+  "title": "LiurenRulePassage",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "work", "edition", "tradition", "section", "textTraditional", "textSimplified", "sourcePage", "provenance", "checksum"],
+  "properties": {
+    "id": { "type": "string", "minLength": 1, "maxLength": 160 },
+    "work": { "const": "大六壬规则摘录" },
+    "edition": { "type": "string", "minLength": 1, "maxLength": 300 },
+    "tradition": { "const": "liuren-shijia-jiuzong" },
+    "section": { "enum": ["school", "month-general", "plates", "generals", "lessons", "kezei", "biyong", "shehai", "yaoke", "special", "course", "limitations"] },
+    "textTraditional": { "type": "string", "minLength": 1, "maxLength": 20000 },
+    "textSimplified": { "type": "string", "minLength": 1, "maxLength": 20000 },
+    "sourcePage": { "type": "string", "minLength": 1, "maxLength": 300 },
+    "provenance": { "const": "project-authored" },
+    "checksum": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+  }
+}

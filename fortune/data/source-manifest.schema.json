@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:fortune-telling:schema:source-manifest:1.0.0",
+  "title": "SourceManifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "manifestVersion",
+    "projectTradition",
+    "ruleProfile",
+    "createdAt",
+    "selectedBaseEditionId",
+    "selectedElectronicSourceId",
+    "corpusScope",
+    "sources",
+    "ingestionPolicy"
+  ],
+  "properties": {
+    "manifestVersion": { "const": "1.0.0" },
+    "projectTradition": { "const": "zhouyi-textual" },
+    "ruleProfile": { "const": "zhouyi-jingyi-v1" },
+    "createdAt": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+    "selectedBaseEditionId": { "type": "string", "minLength": 1 },
+    "selectedElectronicSourceId": { "type": "string", "minLength": 1 },
+    "corpusScope": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["hexagram-name", "judgement", "tuan", "great-image", "line", "line-image"]
+      },
+      "uniqueItems": true,
+      "minItems": 1
+    },
+    "sources": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/source" },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "ingestionPolicy": { "$ref": "#/$defs/ingestionPolicy" }
+  },
+  "$defs": {
+    "rights": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["originalWork", "transcription", "attributionRequired", "notice"],
+      "properties": {
+        "originalWork": { "type": "string", "minLength": 1 },
+        "transcription": { "type": "string", "minLength": 1 },
+        "attributionRequired": { "type": "boolean" },
+        "licenseUrl": { "type": "string", "pattern": "^https://" },
+        "notice": { "type": "string", "minLength": 1 }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "role", "title", "work", "edition", "tradition", "sourceUrl", "checkedAt", "usage", "rights", "notes"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "role": { "type": "string", "enum": ["base-edition", "electronic-transcription", "cross-check"] },
+        "title": { "type": "string", "minLength": 1 },
+        "work": { "const": "周易" },
+        "edition": { "type": "string", "minLength": 1 },
+        "tradition": { "const": "zhouyi-textual" },
+        "sourceUrl": { "type": "string", "pattern": "^https://" },
+        "fixedRevisionUrl": { "type": "string", "pattern": "^https://" },
+        "revisionId": { "type": "string", "minLength": 1 },
+        "volumeRevisions": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["volume", "title", "revisionId", "fixedRevisionUrl"],
+            "properties": {
+              "volume": { "type": "integer", "minimum": 1, "maximum": 6 },
+              "title": { "type": "string", "minLength": 1 },
+              "revisionId": { "type": "string", "minLength": 1 },
+              "fixedRevisionUrl": { "type": "string", "pattern": "^https://" }
+            }
+          }
+        },
+        "checkedAt": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+        "usage": { "type": "string", "enum": ["source-of-record", "verification-only"] },
+        "rights": { "$ref": "#/$defs/rights" },
+        "notes": { "type": "string", "minLength": 1 }
+      }
+    },
+    "ingestionPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceOfRecord",
+        "crossCheckRequired",
+        "minimumReviewStatusForRuntime",
+        "allowModernTranslations",
+        "allowUnlicensedCommentary",
+        "preserveTraditionalText",
+        "checksumAlgorithm",
+        "normalization"
+      ],
+      "properties": {
+        "sourceOfRecord": { "type": "string", "minLength": 1 },
+        "crossCheckRequired": { "type": "boolean" },
+        "minimumReviewStatusForRuntime": { "const": "double-checked" },
+        "allowModernTranslations": { "const": false },
+        "allowUnlicensedCommentary": { "const": false },
+        "preserveTraditionalText": { "const": true },
+        "checksumAlgorithm": { "const": "sha256" },
+        "normalization": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

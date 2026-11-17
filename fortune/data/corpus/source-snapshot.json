@@ -1,0 +1,60 @@
+{
+  "generatedAt": "2026-08-22",
+  "sourceOfRecord": "wikisource-zhouyi-sibu-congkan",
+  "baseEdition": "zhouyi-sibu-congkan",
+  "volumes": [
+    {
+      "number": 1,
+      "title": "周易 (四部叢刊本)/卷一",
+      "revisionId": 2652448,
+      "sourceUrl": "https://zh.wikisource.org/w/index.php?title=%E5%91%A8%E6%98%93+%28%E5%9B%9B%E9%83%A8%E5%8F%A2%E5%88%8A%E6%9C%AC%29%2F%E5%8D%B7%E4%B8%80&oldid=2652448",
+      "pageUrlExample": "https://zh.wikisource.org/wiki/Page%3ASibu_Congkan0001-%E7%8E%8B%E5%BC%BC-%E5%91%A8%E6%98%93-2-1.djvu%2F4"
+    },
+    {
+      "number": 2,
+      "title": "周易 (四部叢刊本)/卷二",
+      "revisionId": 2652373,
+      "sourceUrl": "https://zh.wikisource.org/w/index.php?title=%E5%91%A8%E6%98%93+%28%E5%9B%9B%E9%83%A8%E5%8F%A2%E5%88%8A%E6%9C%AC%29%2F%E5%8D%B7%E4%BA%8C&oldid=2652373",
+      "pageUrlExample": "https://zh.wikisource.org/wiki/Page%3ASibu_Congkan0001-%E7%8E%8B%E5%BC%BC-%E5%91%A8%E6%98%93-2-1.djvu%2F38"
+    },
+    {
+      "number": 3,
+      "title": "周易 (四部叢刊本)/卷三",
+      "revisionId": 2652374,
+      "sourceUrl": "https://zh.wikisource.org/w/index.php?title=%E5%91%A8%E6%98%93+%28%E5%9B%9B%E9%83%A8%E5%8F%A2%E5%88%8A%E6%9C%AC%29%2F%E5%8D%B7%E4%B8%89&oldid=2652374",
+      "pageUrlExample": "https://zh.wikisource.org/wiki/Page%3ASibu_Congkan0001-%E7%8E%8B%E5%BC%BC-%E5%91%A8%E6%98%93-2-1.djvu%2F60"
+    },
+    {
+      "number": 4,
+      "title": "周易 (四部叢刊本)/卷四",
+      "revisionId": 2652375,
+      "sourceUrl": "https://zh.wikisource.org/w/index.php?title=%E5%91%A8%E6%98%93+%28%E5%9B%9B%E9%83%A8%E5%8F%A2%E5%88%8A%E6%9C%AC%29%2F%E5%8D%B7%E5%9B%9B&oldid=2652375",
+      "pageUrlExample": "https://zh.wikisource.org/wiki/Page%3ASibu_Congkan0001-%E7%8E%8B%E5%BC%BC-%E5%91%A8%E6%98%93-2-1.djvu%2F84"
+    },
+    {
+      "number": 5,
+      "title": "周易 (四部叢刊本)/卷五",
+      "revisionId": 2652376,
+      "sourceUrl": "https://zh.wikisource.org/w/index.php?title=%E5%91%A8%E6%98%93+%28%E5%9B%9B%E9%83%A8%E5%8F%A2%E5%88%8A%E6%9C%AC%29%2F%E5%8D%B7%E4%BA%94&oldid=2652376",
+      "pageUrlExample": "https://zh.wikisource.org/wiki/Page%3ASibu_Congkan0001-%E7%8E%8B%E5%BC%BC-%E5%91%A8%E6%98%93-2-1.djvu%2F114"
+    },
+    {
+      "number": 6,
+      "title": "周易 (四部叢刊本)/卷六",
+      "revisionId": 2652377,
+      "sourceUrl": "https://zh.wikisource.org/w/index.php?title=%E5%91%A8%E6%98%93+%28%E5%9B%9B%E9%83%A8%E5%8F%A2%E5%88%8A%E6%9C%AC%29%2F%E5%8D%B7%E5%85%AD&oldid=2652377",
+      "pageUrlExample": "https://zh.wikisource.org/wiki/Page%3ASibu_Congkan0002-%E7%8E%8B%E5%BC%BC-%E5%91%A8%E6%98%93-2-2.djvu%2F2"
+    }
+  ],
+  "counts": {
+    "records": 1024,
+    "hexagrams": 64,
+    "judgements": 64,
+    "lines": 384,
+    "tuan": 64,
+    "greatImages": 64,
+    "lineImages": 384
+  },
+  "reviewStatus": "double-checked",
+  "checksum": "每条记录按阶段0的 SourcePassage 约定单独计算 sha256。"
+}

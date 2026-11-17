@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:fortune-telling:schema:ziwei-facts:1.0.0",
+  "title": "ZiweiFacts",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "engineId", "birth", "time", "chart", "lifePalaceIndex", "bodyPalaceIndex", "palaces", "fourTransformations", "decadals", "flowYears", "adapter", "ruleHits", "readingPolicy", "ruleProfile", "engineVersion"],
+  "properties": {
+    "schemaVersion": { "const": "fortune-ziwei-facts.v1" },
+    "engineId": { "const": "ziwei" },
+    "birth": { "$ref": "#/$defs/birth" },
+    "time": { "$ref": "#/$defs/time" },
+    "chart": { "$ref": "#/$defs/chart" },
+    "lifePalaceIndex": { "type": "integer", "minimum": 0, "maximum": 11 },
+    "bodyPalaceIndex": { "type": "integer", "minimum": 0, "maximum": 11 },
+    "palaces": { "type": "array", "minItems": 12, "maxItems": 12, "items": { "$ref": "#/$defs/palace" } },
+    "fourTransformations": { "$ref": "#/$defs/fourTransformations" },
+    "decadals": { "type": "array", "minItems": 12, "maxItems": 12, "items": { "$ref": "#/$defs/decadal" } },
+    "flowYears": { "type": "array", "minItems": 1, "maxItems": 12, "items": { "$ref": "#/$defs/flowYear" } },
+    "adapter": { "type": "object", "additionalProperties": false, "required": ["id", "version", "package", "packageVersion"], "properties": { "id": { "const": "iztro" }, "version": { "const": "2.5.8" }, "package": { "const": "iztro" }, "packageVersion": { "const": "2.5.8" } } },
+    "ruleHits": { "type": "array", "items": { "$ref": "#/$defs/ruleHit" } },
+    "readingPolicy": { "const": "ziwei-doushu-analysis-v1" },
+    "ruleProfile": { "const": "ziwei-doushu-v1" },
+    "engineVersion": { "const": "0.6.0" }
+  },
+  "$defs": {
+    "lunarDate": {
+      "type": "object", "additionalProperties": false, "required": ["year", "month", "day", "isLeapMonth"],
+      "properties": { "year": { "type": "integer" }, "month": { "type": "integer" }, "day": { "type": "integer" }, "isLeapMonth": { "type": "boolean" } }
+    },
+    "birth": {
+      "type": "object", "additionalProperties": false,
+      "required": ["gender", "adapterGender", "calendarType", "originalBirthAt", "normalizedBirthAt", "timezone", "timePolicyId", "fixLeap"],
+      "properties": {
+        "profileId": { "type": "string" }, "displayName": { "type": "string" },
+        "gender": { "enum": ["male", "female", "unspecified"] }, "adapterGender": { "enum": ["male", "female"] },
+        "calendarType": { "enum": ["gregorian", "lunisolar"] }, "originalBirthAt": { "type": "string" }, "normalizedBirthAt": { "type": "string" },
+        "lunarDate": { "$ref": "#/$defs/lunarDate" }, "timezone": { "type": "string" }, "timePolicyId": { "type": "string" }, "fixLeap": { "type": "boolean" }
+      }
+    },
+    "time": {
+      "type": "object", "required": ["civil", "calendar", "solarDate", "timeIndex", "timeLabel", "adapterConfig", "adapterConfigVersion"],
+      "properties": { "civil": { "type": "object" }, "calendar": { "type": "object" }, "solarDate": { "type": "string" }, "timeIndex": { "type": "integer", "minimum": 0, "maximum": 12 }, "timeLabel": { "type": "string" }, "adapterConfig": { "type": "object" }, "adapterConfigVersion": { "const": "project-ziwei-adapter-config-v1" } }
+    },
+    "chart": {
+      "type": "object", "additionalProperties": false,
+      "required": ["solarDate", "lunarDate", "chineseDate", "time", "timeRange", "zodiac", "sign", "earthlyBranchOfSoulPalace", "earthlyBranchOfBodyPalace", "soul", "body", "fiveElementsClass"],
+      "properties": { "solarDate": { "type": "string" }, "lunarDate": { "type": "string" }, "chineseDate": { "type": "string" }, "time": { "type": "string" }, "timeRange": { "type": "string" }, "zodiac": { "type": "string" }, "sign": { "type": "string" }, "earthlyBranchOfSoulPalace": { "type": "string" }, "earthlyBranchOfBodyPalace": { "type": "string" }, "soul": { "type": "string" }, "body": { "type": "string" }, "fiveElementsClass": { "type": "string" } }
+    },
+    "star": {
+      "type": "object", "additionalProperties": false, "required": ["name", "type", "scope"],
+      "properties": { "name": { "type": "string" }, "type": { "type": "string" }, "scope": { "type": "string" }, "brightness": { "type": "string" }, "mutagen": { "enum": ["禄", "权", "科", "忌"] } }
+    },
+    "decadal": {
+      "type": "object", "additionalProperties": false, "required": ["palaceIndex", "palaceName", "range", "heavenlyStem", "earthlyBranch"],
+      "properties": { "palaceIndex": { "type": "integer", "minimum": 0, "maximum": 11 }, "palaceName": { "type": "string" }, "range": { "type": "array", "prefixItems": [{ "type": "integer" }, { "type": "integer" }], "minItems": 2, "maxItems": 2 }, "heavenlyStem": { "type": "string" }, "earthlyBranch": { "type": "string" } }
+    },
+    "palace": {
+      "type": "object", "additionalProperties": false,
+      "required": ["index", "name", "isBodyPalace", "isOriginalPalace", "heavenlyStem", "earthlyBranch", "majorStars", "minorStars", "adjectiveStars", "changsheng12", "boshi12", "jiangqian12", "suiqian12", "decadal", "ages", "surroundedPalaces"],
+      "properties": {
+        "index": { "type": "integer", "minimum": 0, "maximum": 11 }, "name": { "type": "string" }, "isBodyPalace": { "type": "boolean" }, "isOriginalPalace": { "type": "boolean" }, "heavenlyStem": { "type": "string" }, "earthlyBranch": { "type": "string" },
+        "majorStars": { "type": "array", "items": { "$ref": "#/$defs/star" } }, "minorStars": { "type": "array", "items": { "$ref": "#/$defs/star" } }, "adjectiveStars": { "type": "array", "items": { "$ref": "#/$defs/star" } },
+        "changsheng12": { "type": "string" }, "boshi12": { "type": "string" }, "jiangqian12": { "type": "string" }, "suiqian12": { "type": "string" }, "decadal": { "$ref": "#/$defs/decadal" }, "ages": { "type": "array", "items": { "type": "integer" } },
+        "surroundedPalaces": { "type": "object", "additionalProperties": false, "required": ["target", "opposite", "wealth", "career"], "properties": { "target": { "type": "integer" }, "opposite": { "type": "integer" }, "wealth": { "type": "integer" }, "career": { "type": "integer" } } }
+      }
+    },
+    "transformationHit": { "type": "object", "additionalProperties": false, "required": ["star", "palaceIndex", "palaceName"], "properties": { "star": { "type": "string" }, "palaceIndex": { "type": "integer" }, "palaceName": { "type": "string" } } },
+    "fourTransformations": { "type": "object", "required": ["heavenlyStem", "byMutagen"], "properties": { "heavenlyStem": { "type": "string" }, "byMutagen": { "type": "object", "required": ["禄", "权", "科", "忌"], "properties": { "禄": { "type": "array", "items": { "$ref": "#/$defs/transformationHit" } }, "权": { "type": "array", "items": { "$ref": "#/$defs/transformationHit" } }, "科": { "type": "array", "items": { "$ref": "#/$defs/transformationHit" } }, "忌": { "type": "array", "items": { "$ref": "#/$defs/transformationHit" } } } } } },
+    "flowLayer": { "type": "object", "required": ["index", "name", "heavenlyStem", "earthlyBranch", "palaceNames", "mutagen"], "properties": { "index": { "type": "integer" }, "name": { "type": "string" }, "heavenlyStem": { "type": "string" }, "earthlyBranch": { "type": "string" }, "palaceNames": { "type": "array", "items": { "type": "string" } }, "mutagen": { "type": "array", "items": { "type": "string" } } } },
+    "flowYear": { "type": "object", "additionalProperties": false, "required": ["year", "solarDate", "nominalAge", "decadal", "yearly"], "properties": { "year": { "type": "integer" }, "solarDate": { "type": "string" }, "nominalAge": { "type": "integer" }, "decadal": { "$ref": "#/$defs/flowLayer" }, "yearly": { "$ref": "#/$defs/flowLayer" } } },
+    "ruleHit": { "type": "object", "required": ["ruleId", "version", "category", "result", "details"], "properties": { "ruleId": { "type": "string" }, "version": { "type": "string" }, "category": { "type": "string" }, "result": { "type": "string" }, "details": { "type": "object" } } }
+  }
+}

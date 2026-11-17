@@ -1,0 +1,98 @@
+{
+  "snapshotVersion": "fortune-facts-golden.v1",
+  "ruleProfile": "zhouyi-jingyi-v1",
+  "engineVersion": "0.2.0",
+  "inputLines": [9, 8, 8, 7, 6, 8],
+  "facts": {
+    "lines": [9, 8, 8, 7, 6, 8],
+    "primary": {
+      "number": 51,
+      "nameTraditional": "震",
+      "nameSimplified": "震",
+      "lowerTrigram": {
+        "nameTraditional": "震",
+        "nameSimplified": "震",
+        "symbol": "☳",
+        "lines": [1, 0, 0]
+      },
+      "upperTrigram": {
+        "nameTraditional": "震",
+        "nameSimplified": "震",
+        "symbol": "☳",
+        "lines": [1, 0, 0]
+      }
+    },
+    "changed": {
+      "number": 45,
+      "nameTraditional": "萃",
+      "nameSimplified": "萃",
+      "lowerTrigram": {
+        "nameTraditional": "坤",
+        "nameSimplified": "坤",
+        "symbol": "☷",
+        "lines": [0, 0, 0]
+      },
+      "upperTrigram": {
+        "nameTraditional": "兌",
+        "nameSimplified": "兑",
+        "symbol": "☱",
+        "lines": [1, 1, 0]
+      }
+    },
+    "movingLines": [1, 5],
+    "nuclear": {
+      "number": 39,
+      "nameTraditional": "蹇",
+      "nameSimplified": "蹇",
+      "lowerTrigram": {
+        "nameTraditional": "艮",
+        "nameSimplified": "艮",
+        "symbol": "☶",
+        "lines": [0, 0, 1]
+      },
+      "upperTrigram": {
+        "nameTraditional": "坎",
+        "nameSimplified": "坎",
+        "symbol": "☵",
+        "lines": [0, 1, 0]
+      }
+    },
+    "opposite": {
+      "number": 57,
+      "nameTraditional": "巽",
+      "nameSimplified": "巽",
+      "lowerTrigram": {
+        "nameTraditional": "巽",
+        "nameSimplified": "巽",
+        "symbol": "☴",
+        "lines": [0, 1, 1]
+      },
+      "upperTrigram": {
+        "nameTraditional": "巽",
+        "nameSimplified": "巽",
+        "symbol": "☴",
+        "lines": [0, 1, 1]
+      }
+    },
+    "reversed": {
+      "number": 52,
+      "nameTraditional": "艮",
+      "nameSimplified": "艮",
+      "lowerTrigram": {
+        "nameTraditional": "艮",
+        "nameSimplified": "艮",
+        "symbol": "☶",
+        "lines": [0, 0, 1]
+      },
+      "upperTrigram": {
+        "nameTraditional": "艮",
+        "nameSimplified": "艮",
+        "symbol": "☶",
+        "lines": [0, 0, 1]
+      }
+    },
+    "readingPolicy": "all-moving-lines",
+    "ruleProfile": "zhouyi-jingyi-v1",
+    "engineVersion": "0.2.0"
+  }
+}

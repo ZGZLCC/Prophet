@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:fortune-telling:schema:synthesis:1.0.0",
+  "title": "SynthesisV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "id", "sessionId", "engineRunIds", "provider", "promptProfileId", "promptVersion", "factsHashes", "contentMarkdown", "citationValidation", "createdAt"],
+  "properties": {
+    "schemaVersion": { "const": "fortune-synthesis.v1" },
+    "id": { "type": "string" },
+    "sessionId": { "type": "string" },
+    "engineRunIds": { "type": "array", "items": { "type": "string" }, "minItems": 2, "maxItems": 3 },
+    "provider": { "type": "string" },
+    "model": { "type": "string" },
+    "adapter": { "type": "string" },
+    "promptProfileId": { "type": "string" },
+    "promptVersion": { "type": "string" },
+    "factsHashes": { "type": "array", "items": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }, "minItems": 2, "maxItems": 3 },
+    "contentMarkdown": { "type": "string", "minLength": 1 },
+    "citationValidation": { "type": "object", "required": ["citations", "invalidCitations"], "properties": { "citations": { "type": "array", "items": { "type": "string" } }, "invalidCitations": { "type": "array", "items": { "type": "string" } }, "warning": { "type": "string" } } },
+    "finishReason": { "type": "string" },
+    "createdAt": { "type": "string", "format": "date-time" }
+  }
+}

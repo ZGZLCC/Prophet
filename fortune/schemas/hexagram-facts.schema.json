@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:fortune-telling:schema:hexagram-facts:1.0.0",
+  "title": "HexagramFacts",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["lines", "primary", "changed", "movingLines", "readingPolicy", "ruleProfile", "engineVersion"],
+  "properties": {
+    "lines": {
+      "type": "array",
+      "prefixItems": [
+        { "$ref": "#/$defs/lineValue" },
+        { "$ref": "#/$defs/lineValue" },
+        { "$ref": "#/$defs/lineValue" },
+        { "$ref": "#/$defs/lineValue" },
+        { "$ref": "#/$defs/lineValue" },
+        { "$ref": "#/$defs/lineValue" }
+      ],
+      "minItems": 6,
+      "maxItems": 6,
+      "items": false,
+      "description": "Original lines from initial to top line."
+    },
+    "coinTosses": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "prefixItems": [
+        { "$ref": "#/$defs/coinToss" },
+        { "$ref": "#/$defs/coinToss" },
+        { "$ref": "#/$defs/coinToss" },
+        { "$ref": "#/$defs/coinToss" },
+        { "$ref": "#/$defs/coinToss" },
+        { "$ref": "#/$defs/coinToss" }
+      ],
+      "items": false
+    },
+    "primary": { "$ref": "#/$defs/hexagramRef" },
+    "changed": { "$ref": "#/$defs/hexagramRef" },
+    "movingLines": {
+      "type": "array",
+      "items": { "type": "integer", "minimum": 1, "maximum": 6 },
+      "uniqueItems": true,
+      "maxItems": 6
+    },
+    "nuclear": { "$ref": "#/$defs/hexagramRef" },
+    "opposite": { "$ref": "#/$defs/hexagramRef" },
+    "reversed": { "$ref": "#/$defs/hexagramRef" },
+    "readingPolicy": { "const": "all-moving-lines" },
+    "ruleProfile": { "const": "zhouyi-jingyi-v1" },
+    "engineVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$"
+    }
+  },
+  "$defs": {
+    "lineValue": {
+      "type": "integer",
+      "enum": [6, 7, 8, 9]
+    },
+    "lineValues": {
+      "type": "array",
+      "prefixItems": [
+        { "$ref": "#/$defs/lineValue" },
+        { "$ref": "#/$defs/lineValue" },
+        { "$ref": "#/$defs/lineValue" },
+        { "$ref": "#/$defs/lineValue" },
+        { "$ref": "#/$defs/lineValue" },
+        { "$ref": "#/$defs/lineValue" }
+      ],
+      "minItems": 6,
+      "maxItems": 6,
+      "items": false
+    },
+    "binaryLine": {
+      "type": "integer",
+      "enum": [0, 1]
+    },
+    "binaryTrigram": {
+      "type": "array",
+      "prefixItems": [
+        { "$ref": "#/$defs/binaryLine" },
+        { "$ref": "#/$defs/binaryLine" },
+        { "$ref": "#/$defs/binaryLine" }
+      ],
+      "minItems": 3,
+      "maxItems": 3,
+      "items": false
+    },
+    "coinToss": {
+      "type": "array",
+      "prefixItems": [
+        { "$ref": "#/$defs/binaryLine" },
+        { "$ref": "#/$defs/binaryLine" },
+        { "$ref": "#/$defs/binaryLine" }
+      ],
+      "minItems": 3,
+      "maxItems": 3,
+      "items": false
+    },
+    "trigramRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nameTraditional", "nameSimplified", "symbol", "lines"],
+      "properties": {
+        "nameTraditional": { "type": "string", "minLength": 1 },
+        "nameSimplified": { "type": "string", "minLength": 1 },
+        "symbol": { "type": "string", "minLength": 1 },
+        "lines": { "$ref": "#/$defs/binaryTrigram" }
+      }
+    },
+    "hexagramRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["number", "nameTraditional", "nameSimplified", "lowerTrigram", "upperTrigram"],
+      "properties": {
+        "number": { "type": "integer", "minimum": 1, "maximum": 64 },
+        "nameTraditional": { "type": "string", "minLength": 1 },
+        "nameSimplified": { "type": "string", "minLength": 1 },
+        "lowerTrigram": { "$ref": "#/$defs/trigramRef" },
+        "upperTrigram": { "$ref": "#/$defs/trigramRef" }
+      }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Derived from Lucide Compass: https://lucide.dev/icons/compass. See ICON_LICENSE.txt. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
+  <title id="title">Prophet compass</title>
+  <desc id="desc">A compass icon that follows the operating system color scheme.</desc>
+  <style>
+    .tile { fill: #fff; }
+    .edge, .ring, .hub { stroke: #d8d8d8; }
+    .needle-a { fill: #9e9dff; }
+    .needle-b { fill: #d3fbd8; }
+    .hub { fill: #fff; }
+    @media (prefers-color-scheme: dark) {
+      .tile { fill: #080808; }
+      .edge { stroke: #242424; }
+      .ring, .hub { stroke: #464646; }
+      .needle-a { fill: #9190eb; }
+      .needle-b { fill: #c2e7c7; }
+      .hub { fill: #080808; }
+    }
+  </style>
+  <rect class="tile" x="48" y="48" width="928" height="928" rx="208"/>
+  <rect class="edge" x="54" y="54" width="916" height="916" rx="202" fill="none" stroke-width="12"/>
+  <circle class="ring" cx="512" cy="512" r="282" fill="none" stroke-width="64"/>
+  <path class="needle-a" d="M710 314 611 611 413 413Z"/>
+  <path class="needle-b" d="M314 710 413 413 611 611Z"/>
+  <circle class="hub" cx="512" cy="512" r="32" stroke-width="18"/>
+</svg>
