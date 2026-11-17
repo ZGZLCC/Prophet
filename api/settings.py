@@ -10,7 +10,7 @@ from typing import Any, Mapping
 from person_profile import analysis
 import platform_support
 
-APP_VERSION = "1.0.0"
+APP_VERSION = "1.1.0"
 
 TIME_ZONES = {
     "Asia/Shanghai": "北京",

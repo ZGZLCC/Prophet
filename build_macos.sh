@@ -5,7 +5,9 @@ set -euo pipefail
 cd "$(dirname "$0")"
 
 PYTHON="${PYTHON:-python3}"
-APP_VERSION="${PROPHET_VERSION:-1.0.0}"
+# 允许用标签名直接传入（v1.1.0），Info.plist 里只保留数字部分
+APP_VERSION="${PROPHET_VERSION:-1.1.0}"
+APP_VERSION="${APP_VERSION#v}"
 export PROPHET_VERSION="$APP_VERSION"
 
 # Finder 图标来自 assets 里的 PNG，用系统工具合成 .icns

@@ -46,7 +46,7 @@ jobs:
 
       - name: Build package
         env:
-          PROPHET_VERSION: ${{ github.ref_type == 'tag' && github.ref_name || '1.0.0' }}
+          PROPHET_VERSION: ${{ github.ref_type == 'tag' && github.ref_name || '1.1.0' }}
         run: bash ./build_macos.sh
 
       - name: Create release archive

@@ -127,7 +127,7 @@ if sys.platform == "darwin":
         info_plist={
             "CFBundleName": "Prophet",
             "CFBundleDisplayName": "Prophet",
-            "CFBundleShortVersionString": os.environ.get("PROPHET_VERSION", "1.0.0"),
+            "CFBundleShortVersionString": os.environ.get("PROPHET_VERSION", "1.1.0"),
             "LSMinimumSystemVersion": "11.0",
             "NSHighResolutionCapable": True,
         },

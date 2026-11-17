@@ -1,6 +1,6 @@
-# Prophet 1.0.0
+# Prophet 1.1.0
 
-本机优先的 Windows 桌面工作台，用于聊天记录导出、证据化人物画像、聊天分析，以及可复现的传统术数记录。
+本机优先的桌面工作台，用于聊天记录导出、证据化人物画像、聊天分析，以及可复现的传统术数记录。
 
 Prophet 由 `desktop.py` 启动 pywebview 窗口，直接加载本地 HTML、CSS 和 JavaScript，**不启动 Web 服务，也不占用端口**。聊天原文、画像证据、结构化盘面和复盘结果都先落盘到本机 SQLite，模型只负责生成解释性内容。
 
@@ -351,8 +351,8 @@ desktop.py → pywebview → web/ → app_api.py
 **发布新版本**：推送版本标签即可，两个平台会同时构建并写进同一个 Release。
 
 ```powershell
-git tag v1.0.0
-git push origin v1.0.0
+git tag v1.1.0
+git push origin v1.1.0
 ```
 
 Release 中会附上 `Prophet-windows-x64.zip`、`Prophet-macos-arm64.zip` 及各自的 `.sha256`。构建流程见 [.github/workflows/build-windows.yml](.github/workflows/build-windows.yml) 与 [.github/workflows/build-macos.yml](.github/workflows/build-macos.yml)：先跑一遍自检，再打包，然后对产物执行 `--self-test`，只有全部通过才会发布。推到 `main` 或提交 PR 时也会构建，但不发布，只保留 Actions artifact（默认 30 天）。
