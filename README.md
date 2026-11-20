@@ -348,17 +348,6 @@ desktop.py → pywebview → web/ → app_api.py
 
 免安装版由 GitHub Actions 构建，本机不需要打包环境：Windows 在 `windows-latest`，macOS 在 `macos-latest`（arm64）。
 
-**发布新版本**：推送版本标签即可，两个平台会同时构建并写进同一个 Release。
-
-```powershell
-git tag v1.1.0
-git push origin v1.1.0
-```
-
-Release 中会附上 `Prophet-windows-x64.zip`、`Prophet-macos-arm64.zip` 及各自的 `.sha256`。构建流程见 [.github/workflows/build-windows.yml](.github/workflows/build-windows.yml) 与 [.github/workflows/build-macos.yml](.github/workflows/build-macos.yml)：先跑一遍自检，再打包，然后对产物执行 `--self-test`，只有全部通过才会发布。推到 `main` 或提交 PR 时也会构建，但不发布，只保留 Actions artifact（默认 30 天）。
-
-> 面向普通用户请始终使用 Release 里的压缩包。Actions artifact 由 GitHub 自己再包一层 zip：Windows 的 artifact 里是文件，解压一次即可；macOS 的 `.app` 必须保持可执行权限，所以 artifact 里放的是完整 zip，需要解压两次。
-
 **本地构建**（可选，必须在目标平台上执行，PyInstaller 无法交叉编译）：
 
 ```powershell
